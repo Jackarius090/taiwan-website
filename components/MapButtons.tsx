@@ -24,12 +24,10 @@ export default function MapButtons() {
         {regions.map((region) => {
           return (
             <path
-              className="hover:bg-sky-700"
+              className="hover:fill-[#4a8f58]"
               key={region.id}
               onClick={() => handleClick(region.name)}
               d={region.d}
-              onMouseEnter={(e) => (e.target.style.fill = "#4a8f58")}
-              onMouseLeave={(e) => (e.target.style.fill = "#6f9c76")}
             ></path>
           );
         })}
