@@ -17,6 +17,7 @@ export default function Mapgame() {
   const [result, setResult] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [guess, setGuess] = useState("");
+  const [showIncorrect, setShowIncorrect] = useState(false);
 
   //Fisher-Yates shuffle algorithm from stack overflow
   function makeRandomRegionsArray() {
@@ -48,7 +49,7 @@ export default function Mapgame() {
     setGuess(answer);
     if (answer === countryQuestion) {
       setResult(true);
-
+      setShowIncorrect(false);
       setQuestionIndex((prev) => {
         const nextIndex = prev + 1;
         if (nextIndex < randomRegionsArray.length) {
@@ -59,7 +60,10 @@ export default function Mapgame() {
           return prev;
         }
       });
-    } else setResult(false);
+    } else {
+      setResult(false);
+      setShowIncorrect(true);
+    }
   }
 
   function startGameButton() {
@@ -83,7 +87,7 @@ export default function Mapgame() {
           <div className="my-3 p-2"> {gameRunning && <div>Where is {countryQuestion}?</div>}</div>
           <div className="my-3 p-2"> {result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
           <div className="my-3 p-2">
-            {!result && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {guess}!</div>}
+            {showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {guess}!</div>}
           </div>
         </article>
       </div>
