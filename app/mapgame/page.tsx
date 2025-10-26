@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import MapButtons from "@/components/MapButtons";
-import QuizBox from "@/components/QuizBox";
 import regions from "../../lib/regions.json";
+import { Button } from "@/components/ui/button";
 
 export default function Mapgame() {
   const [gameRunning, setGameRunning] = useState(false);
@@ -16,6 +16,7 @@ export default function Mapgame() {
   >([]);
   const [result, setResult] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [guess, setGuess] = useState("");
 
   //Fisher-Yates shuffle algorithm from stack overflow
   function makeRandomRegionsArray() {
@@ -29,10 +30,7 @@ export default function Mapgame() {
       currentIndex--;
 
       // And swap it with the current element.
-      [newArray[currentIndex], newArray[randomIndex]] = [
-        newArray[randomIndex],
-        newArray[currentIndex],
-      ];
+      [newArray[currentIndex], newArray[randomIndex]] = [newArray[randomIndex], newArray[currentIndex]];
     }
     return newArray;
   }
@@ -47,6 +45,7 @@ export default function Mapgame() {
   }
 
   function checkAnswer(answer: string) {
+    setGuess(answer);
     if (answer === countryQuestion) {
       setResult(true);
 
@@ -63,19 +62,30 @@ export default function Mapgame() {
     } else setResult(false);
   }
 
+  function startGameButton() {
+    makeNewGame();
+    setGameRunning(true);
+  }
+
   return (
     <div className="flex justify-center items-center h-screen bg-amber-200">
       <div className="bg-blue-200 w-3/4 h-[95vh] rounded-md">
         <MapButtons checkAnswer={checkAnswer} />
       </div>
       <div className="w-1/5 h-[95vh]">
-        <QuizBox
-          setGameRunning={setGameRunning}
-          gameRunning={gameRunning}
-          countryQuestion={countryQuestion}
-          makeNewGame={makeNewGame}
-          result={result}
-        />
+        <article className="border-2 border-neutral-800 rounded-md h-full p-4 ml-4">
+          <Button className="my-3" onClick={startGameButton}>
+            Start Game
+          </Button>
+          <div className="my-3 p-2">
+            {gameRunning && `Question ${questionIndex + 1} of ${randomRegionsArray.length}`}
+          </div>
+          <div className="my-3 p-2"> {gameRunning && <div>Where is {countryQuestion}?</div>}</div>
+          <div className="my-3 p-2"> {result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
+          <div className="my-3 p-2">
+            {!result && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {guess}!</div>}
+          </div>
+        </article>
       </div>
     </div>
   );
