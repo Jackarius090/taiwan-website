@@ -25,5 +25,4 @@ export default function QuizBox({
       {result && <div>Correct!</div>}
     </div>
   );
-  1;
 }

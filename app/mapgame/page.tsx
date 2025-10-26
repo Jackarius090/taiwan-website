@@ -34,22 +34,32 @@ export default function Mapgame() {
         newArray[currentIndex],
       ];
     }
-
     return newArray;
   }
 
   function makeNewGame() {
     const newRegionArray = makeRandomRegionsArray();
+    setQuestionIndex(0);
     setRandomRegionsArray(newRegionArray);
     setCountryQuestion(newRegionArray[0].name);
+    setResult(false);
     console.log(newRegionArray);
   }
 
   function checkAnswer(answer: string) {
-    if (answer == countryQuestion) {
+    if (answer === countryQuestion) {
       setResult(true);
-      setQuestionIndex((prev) => prev + 1);
-      setCountryQuestion(randomRegionsArray[questionIndex].name);
+
+      setQuestionIndex((prev) => {
+        const nextIndex = prev + 1;
+        if (nextIndex < randomRegionsArray.length) {
+          setCountryQuestion(randomRegionsArray[nextIndex].name);
+          return nextIndex;
+        } else {
+          setCountryQuestion("Congrats you finished the quiz!");
+          return prev;
+        }
+      });
     } else setResult(false);
   }
 
