@@ -18,6 +18,8 @@ export default function Mapgame() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [guess, setGuess] = useState("");
   const [showIncorrect, setShowIncorrect] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState([""]);
+  const [tries, setTries] = useState(3);
 
   //Fisher-Yates shuffle algorithm from stack overflow
   function makeRandomRegionsArray() {
@@ -42,13 +44,27 @@ export default function Mapgame() {
     setRandomRegionsArray(newRegionArray);
     setCountryQuestion(newRegionArray[0].name);
     setResult(false);
+    setTries(3);
     console.log(newRegionArray);
   }
 
   function checkAnswer(answer: string) {
     setGuess(answer);
-    if (answer === countryQuestion) {
+    if (tries === 0) {
+      setQuestionIndex((prev) => {
+        const nextIndex = prev + 1;
+        if (nextIndex < randomRegionsArray.length) {
+          setCountryQuestion(randomRegionsArray[nextIndex].name);
+          return nextIndex;
+        } else {
+          setCountryQuestion("Congrats you finished the quiz!");
+          return prev;
+        }
+      });
+    } else if (answer === countryQuestion) {
+      setCorrectAnswers((prev) => [...prev, "✅"]);
       setResult(true);
+      setTries(3);
       setShowIncorrect(false);
       setQuestionIndex((prev) => {
         const nextIndex = prev + 1;
@@ -61,7 +77,9 @@ export default function Mapgame() {
         }
       });
     } else {
+      setCorrectAnswers((prev) => [...prev, "❌"]);
       setResult(false);
+      setTries((prev) => prev - 1);
       setShowIncorrect(true);
     }
   }
@@ -89,6 +107,16 @@ export default function Mapgame() {
           <div className="my-3 p-2">
             {showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {guess}!</div>}
           </div>
+          <div className="flex flex-col">
+            {correctAnswers.map((answer, i) => {
+              return (
+                <div key={i}>
+                  {i ? i + "." : ""} {answer}
+                </div>
+              );
+            })}
+          </div>
+          <div>Tries left: {tries}</div>
         </article>
       </div>
     </div>
