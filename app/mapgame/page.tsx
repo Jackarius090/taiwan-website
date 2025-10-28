@@ -50,18 +50,7 @@ export default function Mapgame() {
 
   function checkAnswer(answer: string) {
     setGuess(answer);
-    if (tries === 0) {
-      setQuestionIndex((prev) => {
-        const nextIndex = prev + 1;
-        if (nextIndex < randomRegionsArray.length) {
-          setCountryQuestion(randomRegionsArray[nextIndex].name);
-          return nextIndex;
-        } else {
-          setCountryQuestion("Congrats you finished the quiz!");
-          return prev;
-        }
-      });
-    } else if (answer === countryQuestion) {
+    if (answer === countryQuestion) {
       setCorrectAnswers((prev) => [...prev, "✅"]);
       setResult(true);
       setTries(3);
@@ -77,7 +66,21 @@ export default function Mapgame() {
         }
       });
     } else {
-      setCorrectAnswers((prev) => [...prev, "❌"]);
+      if (tries === 1) {
+        setCorrectAnswers((prev) => [...prev, "❌"]);
+        setQuestionIndex((prev) => {
+          const nextIndex = prev + 1;
+          if (nextIndex < randomRegionsArray.length) {
+            setCountryQuestion(randomRegionsArray[nextIndex].name);
+            return nextIndex;
+          } else {
+            setCountryQuestion("Congrats you finished the quiz!");
+            return prev;
+          }
+        });
+        setTries(3);
+        return;
+      }
       setResult(false);
       setTries((prev) => prev - 1);
       setShowIncorrect(true);
@@ -102,11 +105,12 @@ export default function Mapgame() {
           <div className="my-3 p-2">
             {gameRunning && `Question ${questionIndex + 1} of ${randomRegionsArray.length}`}
           </div>
-          <div className="my-3 p-2"> {gameRunning && <div>Where is {countryQuestion}?</div>}</div>
+          <div className="my-3 p-2 font-bold"> {gameRunning && <div>Where is {countryQuestion}?</div>}</div>
           <div className="my-3 p-2"> {result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
           <div className="my-3 p-2">
             {showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {guess}!</div>}
           </div>
+          {gameRunning && <div className="my-3 p-2">Tries left: {tries}</div>}
           <div className="flex flex-col">
             {correctAnswers.map((answer, i) => {
               return (
@@ -116,7 +120,6 @@ export default function Mapgame() {
               );
             })}
           </div>
-          <div>Tries left: {tries}</div>
         </article>
       </div>
     </div>
