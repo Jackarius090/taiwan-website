@@ -18,8 +18,9 @@ export default function Mapgame() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [guess, setGuess] = useState("");
   const [showIncorrect, setShowIncorrect] = useState(false);
-  const [correctAnswers, setCorrectAnswers] = useState([""]);
+  const [results, setResults] = useState<string[]>([]);
   const [tries, setTries] = useState(3);
+  const [finishedQuiz, setFinishedQuiz] = useState(false);
 
   //Fisher-Yates shuffle algorithm from stack overflow
   function makeRandomRegionsArray() {
@@ -45,13 +46,16 @@ export default function Mapgame() {
     setCountryQuestion(newRegionArray[0].name);
     setResult(false);
     setTries(3);
-    console.log(newRegionArray);
   }
 
   function checkAnswer(answer: string) {
+    if (!gameRunning) {
+      return;
+    }
     setGuess(answer);
     if (answer === countryQuestion) {
-      setCorrectAnswers((prev) => [...prev, "✅"]);
+      setResults((prev) => [...prev, "✅"]);
+
       setResult(true);
       setTries(3);
       setShowIncorrect(false);
@@ -61,13 +65,15 @@ export default function Mapgame() {
           setCountryQuestion(randomRegionsArray[nextIndex].name);
           return nextIndex;
         } else {
+          setFinishedQuiz(true);
+          setGameRunning(false);
           setCountryQuestion("Congrats you finished the quiz!");
           return prev;
         }
       });
     } else {
       if (tries === 1) {
-        setCorrectAnswers((prev) => [...prev, "❌"]);
+        setResults((prev) => [...prev, "❌"]);
         setQuestionIndex((prev) => {
           const nextIndex = prev + 1;
           if (nextIndex < randomRegionsArray.length) {
@@ -75,6 +81,8 @@ export default function Mapgame() {
             return nextIndex;
           } else {
             setCountryQuestion("Congrats you finished the quiz!");
+            setFinishedQuiz(true);
+            setGameRunning(false);
             return prev;
           }
         });
@@ -91,6 +99,7 @@ export default function Mapgame() {
     makeNewGame();
     setGameRunning(true);
   }
+  const correctAnswers = results.filter((el) => el === "✅");
 
   return (
     <div className="flex justify-center items-center h-screen bg-amber-200">
@@ -106,16 +115,21 @@ export default function Mapgame() {
             {gameRunning && `Question ${questionIndex + 1} of ${randomRegionsArray.length}`}
           </div>
           <div className="my-3 p-2 font-bold"> {gameRunning && <div>Where is {countryQuestion}?</div>}</div>
+          {finishedQuiz && (
+            <div>
+              Congrats! you finished the quiz! You got {correctAnswers.length} out of {results.length} correct.
+            </div>
+          )}
           <div className="my-3 p-2"> {result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
           <div className="my-3 p-2">
             {showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {guess}!</div>}
           </div>
           {gameRunning && <div className="my-3 p-2">Tries left: {tries}</div>}
           <div className="flex flex-col">
-            {correctAnswers.map((answer, i) => {
+            {results.map((answer, i) => {
               return (
                 <div key={i}>
-                  {i ? i + "." : ""} {answer}
+                  {answer ? i + 1 + "." : ""} {answer}
                 </div>
               );
             })}
