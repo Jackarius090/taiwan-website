@@ -125,7 +125,7 @@ export default function Mapgame() {
             {showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {guess}!</div>}
           </div>
           {gameRunning && <div className="my-3 p-2">Tries left: {tries}</div>}
-          <div className="flex flex-col">
+          <div className="grid grid-cols-2 gap-1">
             {results.map((answer, i) => {
               return (
                 <div key={i}>
