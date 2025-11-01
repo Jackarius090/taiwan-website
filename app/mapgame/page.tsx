@@ -12,7 +12,7 @@ export default function Mapgame() {
       id: string;
       name: string;
       d: string;
-      bbox?: number;
+      bbox?: { x: number; y: number; width: number; height: number };
     }>
   >([]);
   const [result, setResult] = useState(false);
