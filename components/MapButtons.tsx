@@ -1,7 +1,11 @@
 "use client";
 import regions from "../lib/regions.json";
+import { useState } from "react";
+import clsx from "clsx";
 
 export default function MapButtons({ checkAnswer }: { checkAnswer(answer: string): void }) {
+  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+
   function handleClick(regionName: string) {
     checkAnswer(regionName);
     console.log(regionName);
@@ -30,12 +34,13 @@ export default function MapButtons({ checkAnswer }: { checkAnswer(answer: string
                 width={region.bbox.width}
                 height={region.bbox.height}
                 fill="transparent"
-                cursor="pointer"
                 onClick={() => handleClick(region.name)}
+                onMouseEnter={() => setHoveredRegion(region.name)}
+                onMouseLeave={() => setHoveredRegion(null)}
               />
             )}
             <path
-              className="hover:fill-[#4a8f58]"
+              className={clsx("hover:fill-[#4a8f58]", hoveredRegion === region.name && "fill-[#4a8f58]")}
               key={region.id}
               onClick={() => handleClick(region.name)}
               d={region.d}

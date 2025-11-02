@@ -110,7 +110,7 @@ export default function Mapgame() {
       <div className="w-1/5 h-[95vh]">
         <article className="border-2 border-neutral-800 rounded-md h-full p-4 ml-4">
           <Button className="my-3" onClick={startGameButton}>
-            Start Game
+            {gameRunning ? "Restart Game" : "Start Game"}
           </Button>
           <div className="my-3 p-2">
             {gameRunning && `Question ${questionIndex + 1} of ${randomRegionsArray.length}`}
