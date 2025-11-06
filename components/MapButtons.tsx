@@ -9,7 +9,6 @@ export default function MapButtons({ handleRegionClick }: { handleRegionClick(re
 
   function handleClick(region: Region) {
     handleRegionClick(region);
-    console.log(region.name);
   }
 
   return (
