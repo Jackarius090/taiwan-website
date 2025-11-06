@@ -2,7 +2,7 @@
 import regions from "../lib/regions.json";
 import { useState } from "react";
 import clsx from "clsx";
-import { Region } from "@/lib/types/region";
+import { Region } from "@/lib/types/Region";
 
 export default function MapButtons({ handleRegionClick }: { handleRegionClick(region: Region): void }) {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);

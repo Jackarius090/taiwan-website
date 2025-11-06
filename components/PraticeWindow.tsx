@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import MapButtons from "./MapButtons";
-import { Region } from "@/lib/types/region";
+import { Region } from "@/lib/types/Region";
 
 export default function PracticeWindow() {
   const [showLocation, setShowLocation] = useState<Region>();

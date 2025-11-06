@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import regions from "../lib/regions.json";
 import MapButtons from "./MapButtons";
-import { Region } from "@/lib/types/region";
+import { Region } from "@/lib/types/Region";
 
 export default function GameWindow() {
   const [gameRunning, setGameRunning] = useState(false);
