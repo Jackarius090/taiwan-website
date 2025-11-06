@@ -4,18 +4,12 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import regions from "../lib/regions.json";
 import MapButtons from "./MapButtons";
+import { Region } from "@/lib/types/region";
 
 export default function GameWindow() {
   const [gameRunning, setGameRunning] = useState(false);
   const [countryQuestion, setCountryQuestion] = useState("");
-  const [randomRegionsArray, setRandomRegionsArray] = useState<
-    Array<{
-      id: string;
-      name: string;
-      d: string;
-      bbox?: { x: number; y: number; width: number; height: number };
-    }>
-  >([]);
+  const [randomRegionsArray, setRandomRegionsArray] = useState<Region[] | null>(null);
   const [result, setResult] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [guess, setGuess] = useState("");
@@ -50,7 +44,8 @@ export default function GameWindow() {
     setTries(3);
   }
 
-  function checkAnswer(answer: string) {
+  function handleRegionClick(region: Region) {
+    const answer = region.name;
     if (!gameRunning) {
       return;
     }
@@ -64,7 +59,7 @@ export default function GameWindow() {
       setShowIncorrect(false);
       setQuestionIndex((prev) => {
         const nextIndex = prev + 1;
-        if (nextIndex < randomRegionsArray.length) {
+        if (randomRegionsArray && nextIndex < randomRegionsArray.length) {
           setCountryQuestion(randomRegionsArray[nextIndex].name);
           return nextIndex;
         } else {
@@ -79,7 +74,7 @@ export default function GameWindow() {
         setResults((prev) => [...prev, "❌"]);
         setQuestionIndex((prev) => {
           const nextIndex = prev + 1;
-          if (nextIndex < randomRegionsArray.length) {
+          if (randomRegionsArray && nextIndex < randomRegionsArray.length) {
             setCountryQuestion(randomRegionsArray[nextIndex].name);
             return nextIndex;
           } else {
@@ -108,15 +103,15 @@ export default function GameWindow() {
   return (
     <div className="flex h-[90vh]">
       <div className="bg-blue-200 w-3/4 rounded-md">
-        <MapButtons checkAnswer={checkAnswer} />
+        <MapButtons handleRegionClick={handleRegionClick} />
       </div>
       <div className="w-1/4">
         <article className="border-2 border-neutral-800 rounded-md h-full p-4 ml-4">
-          <Button className="my-3" onClick={startGameButton}>
+          <Button variant="outline" className="my-3" onClick={startGameButton}>
             {gameRunning ? "Restart Game" : "Start Game"}
           </Button>
           <div className="my-3 p-2">
-            {gameRunning && `Question ${questionIndex + 1} of ${randomRegionsArray.length}`}
+            {gameRunning && randomRegionsArray && `Question ${questionIndex + 1} of ${randomRegionsArray.length}`}
           </div>
           <div className="my-3 p-2 font-bold"> {gameRunning && <div>Where is {countryQuestion}?</div>}</div>
           {finishedQuiz && (
