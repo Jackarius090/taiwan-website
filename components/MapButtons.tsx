@@ -4,11 +4,11 @@ import { useState } from "react";
 import clsx from "clsx";
 import { Region } from "@/lib/types/Region";
 
-export default function MapButtons({ handleRegionClick }: { handleRegionClick(region: Region): void }) {
+export default function MapButtons({ dispatch }: { dispatch: React.Dispatch<{ type: "ANSWER"; payload: string }> }) {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
-  function handleClick(region: Region) {
-    handleRegionClick(region);
+  function handleClick(region: string) {
+    dispatch({ type: "ANSWER", payload: region });
   }
 
   return (
@@ -34,7 +34,7 @@ export default function MapButtons({ handleRegionClick }: { handleRegionClick(re
                 width={region.bbox.width}
                 height={region.bbox.height}
                 fill="transparent"
-                onClick={() => handleClick(region)}
+                onClick={() => handleClick(region.name)}
                 onMouseEnter={() => setHoveredRegion(region.name)}
                 onMouseLeave={() => setHoveredRegion(null)}
               />
@@ -42,7 +42,7 @@ export default function MapButtons({ handleRegionClick }: { handleRegionClick(re
             <path
               className={clsx("hover:fill-[#4a8f58]", hoveredRegion === region.name && "fill-[#4a8f58]")}
               key={region.id}
-              onClick={() => handleClick(region)}
+              onClick={() => handleClick(region.name)}
               d={region.d}
             ></path>
           </g>
