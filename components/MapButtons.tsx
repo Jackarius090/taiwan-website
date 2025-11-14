@@ -2,14 +2,9 @@
 import regions from "../lib/regions.json";
 import { useState } from "react";
 import clsx from "clsx";
-import { Region } from "@/lib/types/Region";
 
-export default function MapButtons({ dispatch }: { dispatch: React.Dispatch<{ type: "ANSWER"; payload: string }> }) {
+export default function MapButtons({ checkAnswer }: { checkAnswer(answer: string): void }) {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
-
-  function handleClick(region: string) {
-    dispatch({ type: "ANSWER", payload: region });
-  }
 
   return (
     <svg
@@ -34,7 +29,7 @@ export default function MapButtons({ dispatch }: { dispatch: React.Dispatch<{ ty
                 width={region.bbox.width}
                 height={region.bbox.height}
                 fill="transparent"
-                onClick={() => handleClick(region.name)}
+                onClick={() => checkAnswer(region.name)}
                 onMouseEnter={() => setHoveredRegion(region.name)}
                 onMouseLeave={() => setHoveredRegion(null)}
               />
@@ -42,7 +37,7 @@ export default function MapButtons({ dispatch }: { dispatch: React.Dispatch<{ ty
             <path
               className={clsx("hover:fill-[#4a8f58]", hoveredRegion === region.name && "fill-[#4a8f58]")}
               key={region.id}
-              onClick={() => handleClick(region.name)}
+              onClick={() => checkAnswer(region.name)}
               d={region.d}
             ></path>
           </g>

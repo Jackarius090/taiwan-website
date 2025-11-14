@@ -38,7 +38,8 @@ type GameState = {
 
 type GameActions =
   | { type: "START_GAME"; payload: Region[] }
-  | { type: "ANSWER"; payload: string }
+  | { type: "CORRECTANSWER"; payload: string }
+  | { type: "INCORRECTANSWER"; payload: string }
   | { type: "NEXT_QUESTION" }
   | { type: "FINISH_QUIZ" }
   | { type: "RESET" };
@@ -68,28 +69,26 @@ function gameReducer(state: GameState, action: GameActions) {
         questionIndex: 0,
         tries: 3,
       };
-    case "ANSWER":
-      if (action.payload === state.countryQuestion) {
-        const nextIndex = state.questionIndex + 1;
-        return {
-          ...state,
-          result: true,
-          countryQuestion: state.randomRegionsArray?.[nextIndex]?.name,
-          questionIndex: 0,
-          guess: action.payload,
-          showIncorrect: false,
-          results: [...state.results, "✅"],
-          tries: 3,
-        };
-      } else if (action.payload != state.countryQuestion) {
-        return {
-          ...state,
-          result: false,
-          guess: action.payload,
-          showIncorrect: true,
-          tries: state.tries - 1,
-        };
-      }
+    case "CORRECTANSWER":
+      const nextIndex = state.questionIndex + 1;
+      return {
+        ...state,
+        result: true,
+        countryQuestion: state.randomRegionsArray?.[nextIndex]?.name,
+        questionIndex: 0,
+        guess: action.payload,
+        showIncorrect: false,
+        results: [...state.results, "✅"],
+        tries: 3,
+      };
+    case "INCORRECTANSWER":
+      return {
+        ...state,
+        result: false,
+        guess: action.payload,
+        showIncorrect: true,
+        tries: state.tries - 1,
+      };
     default:
       return state;
   }
@@ -98,10 +97,18 @@ function gameReducer(state: GameState, action: GameActions) {
 export default function GameWindow() {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
+  function checkAnswer(answer: string) {
+    if (answer === state.countryQuestion) {
+      dispatch({ type: "CORRECTANSWER", payload: answer });
+    } else {
+      dispatch({ type: "INCORRECTANSWER", payload: answer });
+    }
+  }
+
   return (
     <div className="flex h-[90vh]">
       <div className="bg-blue-200 w-3/4 rounded-md">
-        <MapButtons dispatch={dispatch} />
+        <MapButtons checkAnswer={checkAnswer} />
       </div>
       <div className="w-1/4">
         <article className="border-2 border-neutral-800 rounded-md h-full p-4 ml-4">
