@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import MapButtons from "./MapButtons";
-import { Region } from "@/lib/types/Region";
 
 export default function PracticeWindow() {
-  const [showLocation, setShowLocation] = useState<Region>();
+  const [showLocation, setShowLocation] = useState({ name: "", description: "" });
 
-  function handleRegionClick(region: Region) {
-    setShowLocation(region);
+  function handleRegionClick(name: string, description: string) {
+    setShowLocation({ name, description });
   }
   return (
     <div className="flex h-[90vh]">
