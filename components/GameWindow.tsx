@@ -127,12 +127,12 @@ export default function GameWindow() {
   }
 
   return (
-    <div className="flex h-[90vh]">
-      <div className="bg-blue-200 w-3/4 rounded-md">
+    <div className="flex flex-col md:flex-row h-[90vh]">
+      <div className="bg-blue-200 md:w-3/4 rounded-md">
         <MapButtons handleRegionClick={handleRegionClick} />
       </div>
-      <div className="w-1/4">
-        <article className="border-2 border-neutral-800 rounded-md h-full p-4 ml-4">
+      <div className="md:w-1/4">
+        <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4">
           <Button
             variant="outline"
             className="my-3"
