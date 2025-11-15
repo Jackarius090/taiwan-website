@@ -132,7 +132,7 @@ export default function GameWindow() {
         <MapButtons handleRegionClick={handleRegionClick} />
       </div>
       <div className="md:w-1/4">
-        <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4">
+        <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
           <Button
             variant="outline"
             className="my-3"

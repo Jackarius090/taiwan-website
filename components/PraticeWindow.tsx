@@ -15,7 +15,7 @@ export default function PracticeWindow() {
         <MapButtons handleRegionClick={handleRegionClick} />
       </div>
       <div className="md:w-1/4">
-        <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4">
+        <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
           <div className="pb-4">Click on a region to show the name</div>
           <div>{showLocation?.name}</div>
           <div>{showLocation?.description}</div>
