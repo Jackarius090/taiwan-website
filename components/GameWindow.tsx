@@ -87,7 +87,7 @@ function gameReducer(state: GameState, action: GameActions) {
           questionIndex: nextIndex,
           guess: action.payload,
           showIncorrect: false,
-          results: [...state.results, "✅"],
+          results: [...state.results, "❌"],
           tries: 3,
         };
       }
