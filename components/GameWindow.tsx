@@ -22,13 +22,14 @@ type GameState = {
   gameRunning: boolean;
   countryQuestion: string | undefined;
   randomRegionsArray: Region[];
-  result: boolean;
+  result: boolean | null;
   questionIndex: number;
   guess: string;
   showIncorrect: boolean;
   results: string[];
   tries: number;
   finishedQuiz: boolean;
+  numberIncorrectAnswers: number;
 };
 
 type GameActions =
@@ -43,13 +44,14 @@ const initialState: GameState = {
   gameRunning: false,
   countryQuestion: "",
   randomRegionsArray: makeRandomRegionsArray(),
-  result: false,
+  result: null,
   questionIndex: 0,
   guess: "",
   showIncorrect: false,
   results: [],
   tries: 3,
   finishedQuiz: false,
+  numberIncorrectAnswers: 0,
 };
 
 function gameReducer(state: GameState, action: GameActions) {
@@ -61,9 +63,11 @@ function gameReducer(state: GameState, action: GameActions) {
         gameRunning: true,
         countryQuestion: newRegionArray[0].name,
         randomRegionsArray: newRegionArray,
+        result: null,
         questionIndex: 0,
         results: [],
         tries: 3,
+        numberIncorrectAnswers: 0,
       };
     case "CORRECTANSWER":
       const nextIndex = state.questionIndex + 1;
@@ -89,6 +93,7 @@ function gameReducer(state: GameState, action: GameActions) {
           showIncorrect: false,
           results: [...state.results, "❌"],
           tries: 3,
+          numberIncorrectAnswers: state.numberIncorrectAnswers + 1,
         };
       }
       return {
@@ -97,6 +102,7 @@ function gameReducer(state: GameState, action: GameActions) {
         guess: action.payload,
         showIncorrect: true,
         tries: state.tries - 1,
+        numberIncorrectAnswers: state.numberIncorrectAnswers + 1,
       };
     case "FINISHED_QUIZ":
       return {
@@ -146,10 +152,10 @@ export default function GameWindow() {
               `Question ${state.questionIndex + 1} of ${state.randomRegionsArray.length}`}
           </div>
           <div className="my-3 p-2 font-bold"> {state.gameRunning && <div>Where is {state.countryQuestion}?</div>}</div>
-          {state.finishedQuiz && (
+          {state.finishedQuiz && !state.gameRunning && (
             <div>
-              Congrats! you finished the quiz! You got {state.results.filter(() => "✅").length} out of{" "}
-              {state.results.length} correct.
+              Congrats! you finished the quiz! You found {state.results.filter(() => "✅").length} out of{" "}
+              {state.results.length} regions with {state.numberIncorrectAnswers} incorrect answers.
             </div>
           )}
           <div className="my-3 p-2"> {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
@@ -157,6 +163,7 @@ export default function GameWindow() {
             {state.showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>}
           </div>
           {state.gameRunning && <div className="my-3 p-2">Tries left: {state.tries}</div>}
+          {state.gameRunning && <div className="my-3 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
           <div className="grid grid-cols-2 gap-1">
             {state.results.map((answer, i) => {
               return (
