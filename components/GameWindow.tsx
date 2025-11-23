@@ -72,6 +72,7 @@ function gameReducer(state: GameState, action: GameActions) {
         questionIndex: 0,
         results: [],
         tries: 3,
+        finishedQuiz: false,
         numberIncorrectAnswers: 0,
       };
     case "CORRECTANSWER":
@@ -130,6 +131,8 @@ export default function GameWindow() {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   function handleRegionClick(answer: string) {
+    if (!state.gameRunning || state.finishedQuiz) return;
+
     if (answer === state.countryQuestion?.name) {
       dispatch({ type: "CORRECTANSWER", payload: answer });
     } else {
@@ -140,6 +143,11 @@ export default function GameWindow() {
       dispatch({ type: "FINISHED_QUIZ" });
     }
   }
+  console.log("all results:", state.results);
+  console.log(
+    "filtered:",
+    state.results.filter((result) => result === "✅")
+  );
 
   return (
     <div className="flex flex-col md:flex-row h-[90vh]">
@@ -171,7 +179,7 @@ export default function GameWindow() {
           </div>
           {state.finishedQuiz && !state.gameRunning && (
             <div>
-              Congrats! you finished the quiz! You found {state.results.filter(() => "✅").length} out of{" "}
+              Congrats! you finished the quiz! You found {state.results.filter((r) => r === "✅").length} out of{" "}
               {state.results.length} regions with {state.numberIncorrectAnswers} incorrect answers.
             </div>
           )}
