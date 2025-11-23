@@ -9,4 +9,5 @@ export type Region = {
     height: number;
   };
   description: string;
+  chineseName: string;
 };

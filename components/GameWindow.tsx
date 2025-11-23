@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import regions from "../lib/regions.json";
 import MapButtons from "./MapButtons";
 import { Region } from "@/lib/types/Region";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 //Fisher-Yates shuffle algorithm from stack overflow
 function makeRandomRegionsArray() {
@@ -20,7 +22,7 @@ function makeRandomRegionsArray() {
 
 type GameState = {
   gameRunning: boolean;
-  countryQuestion: string | undefined;
+  countryQuestion: Region | null;
   randomRegionsArray: Region[];
   result: boolean | null;
   questionIndex: number;
@@ -30,6 +32,7 @@ type GameState = {
   tries: number;
   finishedQuiz: boolean;
   numberIncorrectAnswers: number;
+  chineseMode: boolean;
 };
 
 type GameActions =
@@ -38,11 +41,12 @@ type GameActions =
   | { type: "INCORRECTANSWER"; payload: string }
   | { type: "NEXT_QUESTION" }
   | { type: "FINISHED_QUIZ" }
-  | { type: "RESET" };
+  | { type: "RESET" }
+  | { type: "CHINESEMODE" };
 
 const initialState: GameState = {
   gameRunning: false,
-  countryQuestion: "",
+  countryQuestion: null,
   randomRegionsArray: makeRandomRegionsArray(),
   result: null,
   questionIndex: 0,
@@ -52,6 +56,7 @@ const initialState: GameState = {
   tries: 3,
   finishedQuiz: false,
   numberIncorrectAnswers: 0,
+  chineseMode: false,
 };
 
 function gameReducer(state: GameState, action: GameActions) {
@@ -61,7 +66,7 @@ function gameReducer(state: GameState, action: GameActions) {
       return {
         ...state,
         gameRunning: true,
-        countryQuestion: newRegionArray[0].name,
+        countryQuestion: newRegionArray[0],
         randomRegionsArray: newRegionArray,
         result: null,
         questionIndex: 0,
@@ -74,7 +79,7 @@ function gameReducer(state: GameState, action: GameActions) {
       return {
         ...state,
         result: true,
-        countryQuestion: state.randomRegionsArray?.[nextIndex]?.name,
+        countryQuestion: state.randomRegionsArray?.[nextIndex],
         questionIndex: nextIndex,
         guess: action.payload,
         showIncorrect: false,
@@ -87,7 +92,7 @@ function gameReducer(state: GameState, action: GameActions) {
         return {
           ...state,
           result: false,
-          countryQuestion: state.randomRegionsArray?.[nextIndex]?.name,
+          countryQuestion: state.randomRegionsArray?.[nextIndex],
           questionIndex: nextIndex,
           guess: action.payload,
           showIncorrect: false,
@@ -108,9 +113,13 @@ function gameReducer(state: GameState, action: GameActions) {
       return {
         ...state,
         gameRunning: false,
-        countryQuestion: "Congrats! You finished the quiz!",
         showIncorrect: false,
         finishedQuiz: true,
+      };
+    case "CHINESEMODE":
+      return {
+        ...state,
+        chineseMode: !state.chineseMode,
       };
     default:
       return state;
@@ -121,7 +130,7 @@ export default function GameWindow() {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   function handleRegionClick(answer: string) {
-    if (answer === state.countryQuestion) {
+    if (answer === state.countryQuestion?.name) {
       dispatch({ type: "CORRECTANSWER", payload: answer });
     } else {
       dispatch({ type: "INCORRECTANSWER", payload: answer });
@@ -139,6 +148,10 @@ export default function GameWindow() {
       </div>
       <div className="md:w-1/4">
         <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
+          <div className="flex items-center space-x-2">
+            <Switch onClick={() => dispatch({ type: "CHINESEMODE" })} id="chinese-mode" />
+            <Label htmlFor="chinese-mode">Chinese mode</Label>
+          </div>
           <Button
             variant="outline"
             className="my-3"
@@ -151,7 +164,11 @@ export default function GameWindow() {
               state.randomRegionsArray &&
               `Question ${state.questionIndex + 1} of ${state.randomRegionsArray.length}`}
           </div>
-          <div className="my-3 p-2 font-bold"> {state.gameRunning && <div>Where is {state.countryQuestion}?</div>}</div>
+          <div className="my-3 p-2 font-bold">
+            {" "}
+            {state.gameRunning && !state.chineseMode && <div>Where is {state.countryQuestion?.name}</div>}
+            {state.gameRunning && state.chineseMode && <div>Where is {state.countryQuestion?.chineseName}</div>}
+          </div>
           {state.finishedQuiz && !state.gameRunning && (
             <div>
               Congrats! you finished the quiz! You found {state.results.filter(() => "✅").length} out of{" "}
