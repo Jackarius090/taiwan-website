@@ -7,6 +7,8 @@ import MapButtons from "./MapButtons";
 import { Region } from "@/lib/types/Region";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Dispatch, SetStateAction } from "react";
+import { scoreType } from "./GameWrapper";
 
 //Fisher-Yates shuffle algorithm from stack overflow
 function makeRandomRegionsArray() {
@@ -110,6 +112,7 @@ function gameReducer(state: GameState, action: GameActions) {
         tries: state.tries - 1,
         numberIncorrectAnswers: state.numberIncorrectAnswers + 1,
       };
+
     case "FINISHED_QUIZ":
       return {
         ...state,
@@ -127,7 +130,7 @@ function gameReducer(state: GameState, action: GameActions) {
   }
 }
 
-export default function GameWindow() {
+export default function GameWindow({ setScore }: { setScore: Dispatch<SetStateAction<scoreType>> }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   function handleRegionClick(answer: string) {
@@ -140,14 +143,14 @@ export default function GameWindow() {
     }
     if (state.questionIndex >= state.randomRegionsArray?.length - 1) {
       console.log("finished");
+      setScore({
+        correct: state.results.filter((r) => r === "✅").length,
+        questions: state.results.length,
+        incorrectAnswers: state.numberIncorrectAnswers,
+      });
       dispatch({ type: "FINISHED_QUIZ" });
     }
   }
-  console.log("all results:", state.results);
-  console.log(
-    "filtered:",
-    state.results.filter((result) => result === "✅")
-  );
 
   return (
     <div className="flex flex-col md:flex-row h-[90vh]">
@@ -167,13 +170,22 @@ export default function GameWindow() {
           >
             {state.gameRunning ? "Restart Game" : "Start Game"}
           </Button>
+
+          {/* Only show question count if the game is active OR finished */}
+          {(state.gameRunning || state.finishedQuiz) && state.randomRegionsArray && (
+            <div className="my-3 p-2">
+              {`Question ${Math.min(state.questionIndex + 1, state.randomRegionsArray.length)} of ${
+                state.randomRegionsArray.length
+              }`}
+            </div>
+          )}
+
           <div className="my-3 p-2">
             {state.gameRunning &&
               state.randomRegionsArray &&
               `Question ${state.questionIndex + 1} of ${state.randomRegionsArray.length}`}
           </div>
           <div className="my-3 p-2 font-bold">
-            {" "}
             {state.gameRunning && !state.chineseMode && <div>Where is {state.countryQuestion?.name}</div>}
             {state.gameRunning && state.chineseMode && <div>Where is {state.countryQuestion?.chineseName}</div>}
           </div>
