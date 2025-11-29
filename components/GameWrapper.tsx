@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 
 type Score = {
+  name: string;
   correct: number;
   questions: number;
   incorrectAnswers: number;

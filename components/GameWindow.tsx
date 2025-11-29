@@ -141,11 +141,16 @@ export default function GameWindow({ setScores }: { setScores: Dispatch<SetState
     } else {
       dispatch({ type: "INCORRECTANSWER", payload: answer });
     }
-    if (state.questionIndex >= state.randomRegionsArray?.length - 1) {
-      console.log("finished game");
+
+    // this logic handles the final question.
+    if (
+      state.questionIndex >= state.randomRegionsArray?.length - 1 &&
+      (answer === state.countryQuestion?.name || state.tries === 1)
+    ) {
       setScores((prev) => [
         ...prev,
         {
+          name: "jack",
           correct: state.results.filter((r) => r === "✅").length,
           questions: state.results.length,
           incorrectAnswers: state.numberIncorrectAnswers,
@@ -174,16 +179,6 @@ export default function GameWindow({ setScores }: { setScores: Dispatch<SetState
           >
             {state.gameRunning ? "Restart Game" : "Start Game"}
           </Button>
-
-          {/* Only show question count if the game is active OR finished */}
-          {(state.gameRunning || state.finishedQuiz) && state.randomRegionsArray && (
-            <div className="my-3 p-2">
-              {`Question ${Math.min(state.questionIndex + 1, state.randomRegionsArray.length)} of ${
-                state.randomRegionsArray.length
-              }`}
-            </div>
-          )}
-
           <div className="my-3 p-2">
             {state.gameRunning &&
               state.randomRegionsArray &&
