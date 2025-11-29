@@ -8,7 +8,7 @@ import { Region } from "@/lib/types/Region";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Dispatch, SetStateAction } from "react";
-import { scoreType } from "./GameWrapper";
+import { ScoresType } from "./GameWrapper";
 
 //Fisher-Yates shuffle algorithm from stack overflow
 function makeRandomRegionsArray() {
@@ -130,7 +130,7 @@ function gameReducer(state: GameState, action: GameActions) {
   }
 }
 
-export default function GameWindow({ setScore }: { setScore: Dispatch<SetStateAction<scoreType>> }) {
+export default function GameWindow({ setScores }: { setScores: Dispatch<SetStateAction<ScoresType>> }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   function handleRegionClick(answer: string) {
@@ -142,12 +142,16 @@ export default function GameWindow({ setScore }: { setScore: Dispatch<SetStateAc
       dispatch({ type: "INCORRECTANSWER", payload: answer });
     }
     if (state.questionIndex >= state.randomRegionsArray?.length - 1) {
-      console.log("finished");
-      setScore({
-        correct: state.results.filter((r) => r === "✅").length,
-        questions: state.results.length,
-        incorrectAnswers: state.numberIncorrectAnswers,
-      });
+      console.log("finished game");
+      setScores((prev) => [
+        ...prev,
+        {
+          correct: state.results.filter((r) => r === "✅").length,
+          questions: state.results.length,
+          incorrectAnswers: state.numberIncorrectAnswers,
+        },
+      ]);
+
       dispatch({ type: "FINISHED_QUIZ" });
     }
   }

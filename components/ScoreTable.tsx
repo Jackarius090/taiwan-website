@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { scoreType } from "./GameWrapper";
+import { ScoresType } from "./GameWrapper";
 
-export default function ScoreTable({ score }: { score: scoreType }) {
+export default function ScoreTable({ scores }: { scores: ScoresType }) {
   return (
     <Table>
       <TableCaption>Rankings</TableCaption>
@@ -13,11 +13,13 @@ export default function ScoreTable({ score }: { score: scoreType }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">{score?.correct}</TableCell>
-          <TableCell>{score?.questions}</TableCell>
-          <TableCell>{score?.incorrectAnswers}</TableCell>
-        </TableRow>
+        {scores.map((score, i) => (
+          <TableRow key={i}>
+            <TableCell className="font-medium">{score?.correct}</TableCell>
+            <TableCell>{score?.questions}</TableCell>
+            <TableCell>{score?.incorrectAnswers}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
