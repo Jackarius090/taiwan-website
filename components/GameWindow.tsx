@@ -1,7 +1,7 @@
 "use client";
 
 import { useReducer } from "react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -133,22 +133,16 @@ function gameReducer(state: GameState, action: GameActions) {
 
 export default function GameWindow({ setScores }: { setScores: Dispatch<SetStateAction<ScoresType>> }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
-  // const [name, setName] = useState("");
 
   function handleRegionClick(answer: string) {
     if (!state.gameRunning || state.finishedQuiz) return;
-    // find the finalScore and number of incorrect answers manually to avoid stale state going into the setScores function.
-    // let finalScore = state.results.filter((r) => r === "✅").length;
-    // let numberIncorrect = state.numberIncorrectAnswers;
 
     if (answer === state.countryQuestion?.name) {
-      // finalScore++;
       dispatch({ type: "CORRECTANSWER", payload: answer });
     } else {
-      // numberIncorrect++;
       dispatch({ type: "INCORRECTANSWER", payload: answer });
     }
-    // this logic handles the final question and sets the score into the scoreboard.
+    // this logic handles the final question and finishes the quiz.
     if (
       state.questionIndex >= state.randomRegionsArray?.length - 1 &&
       (answer === state.countryQuestion?.name || state.tries === 1)
@@ -157,8 +151,10 @@ export default function GameWindow({ setScores }: { setScores: Dispatch<SetState
     }
   }
 
-  function handleNameSubmit(formData) {
-    const name = formData.get("username");
+  function handleNameSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("username") as string;
     console.log(name);
     setScores((prev) => [
       ...prev,
@@ -203,7 +199,7 @@ export default function GameWindow({ setScores }: { setScores: Dispatch<SetState
               Congrats! you finished the quiz! You found {state.results.filter((r) => r === "✅").length} out of{" "}
               {state.results.length} regions with {state.numberIncorrectAnswers} incorrect answers.
               <div className="flex w-full max-w-sm items-center gap-2">
-                <form action={handleNameSubmit}>
+                <form onSubmit={handleNameSubmit}>
                   <Input
                     // onChange={handleNameButton}
                     // value={name}
