@@ -1,14 +1,15 @@
 "use client";
 
 import { useReducer } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "./ui/button";
-import regions from "../lib/regions.json";
-import MapButtons from "./MapButtons";
-import { Region } from "@/lib/types/Region";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Dispatch, SetStateAction } from "react";
+import MapButtons from "./MapButtons";
+import { Region } from "@/lib/types/Region";
 import { ScoresType } from "./GameWrapper";
+import regions from "../lib/regions.json";
 
 //Fisher-Yates shuffle algorithm from stack overflow
 function makeRandomRegionsArray() {
@@ -132,33 +133,42 @@ function gameReducer(state: GameState, action: GameActions) {
 
 export default function GameWindow({ setScores }: { setScores: Dispatch<SetStateAction<ScoresType>> }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
+  // const [name, setName] = useState("");
 
   function handleRegionClick(answer: string) {
     if (!state.gameRunning || state.finishedQuiz) return;
+    // find the finalScore and number of incorrect answers manually to avoid stale state going into the setScores function.
+    // let finalScore = state.results.filter((r) => r === "✅").length;
+    // let numberIncorrect = state.numberIncorrectAnswers;
 
     if (answer === state.countryQuestion?.name) {
+      // finalScore++;
       dispatch({ type: "CORRECTANSWER", payload: answer });
     } else {
+      // numberIncorrect++;
       dispatch({ type: "INCORRECTANSWER", payload: answer });
     }
-
-    // this logic handles the final question.
+    // this logic handles the final question and sets the score into the scoreboard.
     if (
       state.questionIndex >= state.randomRegionsArray?.length - 1 &&
       (answer === state.countryQuestion?.name || state.tries === 1)
     ) {
-      setScores((prev) => [
-        ...prev,
-        {
-          name: "jack",
-          correct: state.results.filter((r) => r === "✅").length,
-          questions: state.results.length,
-          incorrectAnswers: state.numberIncorrectAnswers,
-        },
-      ]);
-
       dispatch({ type: "FINISHED_QUIZ" });
     }
+  }
+
+  function handleNameSubmit(formData) {
+    const name = formData.get("username");
+    console.log(name);
+    setScores((prev) => [
+      ...prev,
+      {
+        name: name,
+        correct: state.results.filter((r) => r === "✅").length,
+        questions: state.randomRegionsArray.length,
+        incorrectAnswers: state.numberIncorrectAnswers,
+      },
+    ]);
   }
 
   return (
@@ -192,6 +202,23 @@ export default function GameWindow({ setScores }: { setScores: Dispatch<SetState
             <div>
               Congrats! you finished the quiz! You found {state.results.filter((r) => r === "✅").length} out of{" "}
               {state.results.length} regions with {state.numberIncorrectAnswers} incorrect answers.
+              <div className="flex w-full max-w-sm items-center gap-2">
+                <form action={handleNameSubmit}>
+                  <Input
+                    // onChange={handleNameButton}
+                    // value={name}
+                    name="username"
+                    type="text"
+                    placeholder="Add your name"
+                    autoFocus
+                    required
+                    maxLength={15}
+                  />
+                  <Button type="submit" variant="outline">
+                    Submit
+                  </Button>
+                </form>
+              </div>
             </div>
           )}
           <div className="my-3 p-2"> {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
