@@ -131,7 +131,14 @@ function gameReducer(state: GameState, action: GameActions) {
   }
 }
 
-export default function GameWindow({ setScores }: { setScores: Dispatch<SetStateAction<ScoresType>> }) {
+export default function GameWindow({
+  setScores,
+  setScoreBoardOpen,
+}: {
+  setScores: Dispatch<SetStateAction<ScoresType>>;
+  scoreBoardOpen: boolean;
+  setScoreBoardOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   function handleRegionClick(answer: string) {
@@ -165,6 +172,8 @@ export default function GameWindow({ setScores }: { setScores: Dispatch<SetState
         incorrectAnswers: state.numberIncorrectAnswers,
       },
     ]);
+    setScoreBoardOpen(true);
+    e.currentTarget.reset();
   }
 
   return (

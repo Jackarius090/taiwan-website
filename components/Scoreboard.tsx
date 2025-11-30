@@ -2,10 +2,19 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Button } from "@/components/ui/button";
 import { ScoresType } from "./GameWrapper";
 import ScoreTable from "./ScoreTable";
+import { Dispatch, SetStateAction } from "react";
 
-export default function Scoreboard({ scores }: { scores: ScoresType }) {
+export default function Scoreboard({
+  scores,
+  scoreBoardOpen,
+  setScoreBoardOpen,
+}: {
+  scores: ScoresType;
+  scoreBoardOpen: boolean;
+  setScoreBoardOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   return (
-    <Sheet>
+    <Sheet open={scoreBoardOpen} onOpenChange={setScoreBoardOpen}>
       <SheetTrigger asChild>
         <Button variant="outline">Scoreboard</Button>
       </SheetTrigger>
