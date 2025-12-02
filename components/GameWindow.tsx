@@ -177,7 +177,7 @@ export default function GameWindow({
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-[90vh]">
+    <main role="main" className="flex flex-col md:flex-row h-[90vh]">
       <div className="bg-blue-200 md:w-3/4 rounded-md">
         <MapButtons handleRegionClick={handleRegionClick} />
       </div>
@@ -232,10 +232,10 @@ export default function GameWindow({
           </div>
           {state.gameRunning && <div className="my-3 p-2">Tries left: {state.tries}</div>}
           {state.gameRunning && <div className="my-3 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
-          <div className="grid grid-cols-2 gap-1">
+          <div className="grid grid-cols-2 gap-1 overflow-scroll">
             {state.results.map((answer, i) => {
               return (
-                <div key={i}>
+                <div key={i} className="text-[clamp(0.6rem,2vw,1rem)]">
                   {answer ? i + 1 + "." : ""} {answer}
                 </div>
               );
@@ -243,6 +243,6 @@ export default function GameWindow({
           </div>
         </article>
       </div>
-    </div>
+    </main>
   );
 }
