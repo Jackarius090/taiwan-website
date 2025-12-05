@@ -3,10 +3,10 @@
 import { useReducer } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "./ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import MapButtons from "./MapButtons";
+import FinishedGamePanel from "./FinishedGamePanel";
 import { Region } from "@/lib/types/Region";
 import { ScoresType } from "./GameWrapper";
 import regions from "../lib/regions.json";
@@ -23,7 +23,7 @@ function makeRandomRegionsArray() {
   return newArray;
 }
 
-type GameState = {
+export type GameState = {
   gameRunning: boolean;
   countryQuestion: Region | null;
   randomRegionsArray: Region[];
@@ -136,7 +136,6 @@ export default function GameWindow({
   setScoreBoardOpen,
 }: {
   setScores: Dispatch<SetStateAction<ScoresType>>;
-  scoreBoardOpen: boolean;
   setScoreBoardOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
@@ -156,24 +155,6 @@ export default function GameWindow({
     ) {
       dispatch({ type: "FINISHED_QUIZ" });
     }
-  }
-
-  function handleNameSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get("username") as string;
-    console.log(name);
-    setScores((prev) => [
-      ...prev,
-      {
-        name: name,
-        correct: state.results.filter((r) => r === "✅").length,
-        questions: state.randomRegionsArray.length,
-        incorrectAnswers: state.numberIncorrectAnswers,
-      },
-    ]);
-    setScoreBoardOpen(true);
-    e.currentTarget.reset();
   }
 
   return (
@@ -204,27 +185,7 @@ export default function GameWindow({
             {state.gameRunning && state.chineseMode && <div>Where is {state.countryQuestion?.chineseName}</div>}
           </div>
           {state.finishedQuiz && !state.gameRunning && (
-            <div>
-              Congrats! you finished the quiz! You found {state.results.filter((r) => r === "✅").length} out of{" "}
-              {state.results.length} regions with {state.numberIncorrectAnswers} incorrect answers.
-              <div className="flex w-full max-w-sm items-center gap-2">
-                <form onSubmit={handleNameSubmit}>
-                  <Input
-                    // onChange={handleNameButton}
-                    // value={name}
-                    name="username"
-                    type="text"
-                    placeholder="Add your name"
-                    autoFocus
-                    required
-                    maxLength={15}
-                  />
-                  <Button type="submit" variant="outline">
-                    Submit
-                  </Button>
-                </form>
-              </div>
-            </div>
+            <FinishedGamePanel state={state} setScores={setScores} setScoreBoardOpen={setScoreBoardOpen} />
           )}
           <div className="my-3 p-2"> {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
           <div className="my-3 p-2">
@@ -232,12 +193,12 @@ export default function GameWindow({
           </div>
           {state.gameRunning && <div className="my-3 p-2">Tries left: {state.tries}</div>}
           {state.gameRunning && <div className="my-3 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
-          <div className="grid grid-cols-2 gap-1 overflow-scroll">
+          <div className="grid grid-cols-2 gap-1">
             {state.results.map((answer, i) => {
               return (
-                <div key={i} className="text-[clamp(0.6rem,2vw,1rem)]">
+                <span key={i}>
                   {answer ? i + 1 + "." : ""} {answer}
-                </div>
+                </span>
               );
             })}
           </div>

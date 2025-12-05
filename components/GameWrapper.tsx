@@ -33,7 +33,7 @@ export default function GameWrapper() {
         </header>
         <Activity mode={activeTab === "gameMode" ? "visible" : "hidden"}>
           <TabsContent value="gameMode">
-            <GameWindow setScores={setScores} scoreBoardOpen={scoreBoardOpen} setScoreBoardOpen={setScoreBoardOpen} />
+            <GameWindow setScores={setScores} setScoreBoardOpen={setScoreBoardOpen} />
           </TabsContent>
         </Activity>
         <Activity mode={activeTab === "practiceMode" ? "visible" : "hidden"}>
