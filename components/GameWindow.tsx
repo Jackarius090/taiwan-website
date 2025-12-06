@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "./ui/button";
 import { Label } from "@/components/ui/label";
@@ -139,6 +139,7 @@ export default function GameWindow({
   setScoreBoardOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
+  const [showFinishedGamePanel, setShowFinishedGamePanel] = useState(false);
 
   function handleRegionClick(answer: string) {
     if (!state.gameRunning || state.finishedQuiz) return;
@@ -153,6 +154,7 @@ export default function GameWindow({
       state.questionIndex >= state.randomRegionsArray?.length - 1 &&
       (answer === state.countryQuestion?.name || state.tries === 1)
     ) {
+      setShowFinishedGamePanel(true);
       dispatch({ type: "FINISHED_QUIZ" });
     }
   }
@@ -184,8 +186,13 @@ export default function GameWindow({
             {state.gameRunning && !state.chineseMode && <div>Where is {state.countryQuestion?.name}</div>}
             {state.gameRunning && state.chineseMode && <div>Where is {state.countryQuestion?.chineseName}</div>}
           </div>
-          {state.finishedQuiz && !state.gameRunning && (
-            <FinishedGamePanel state={state} setScores={setScores} setScoreBoardOpen={setScoreBoardOpen} />
+          {showFinishedGamePanel && (
+            <FinishedGamePanel
+              state={state}
+              setScores={setScores}
+              setScoreBoardOpen={setScoreBoardOpen}
+              setShowFinishedGamePanel={setShowFinishedGamePanel}
+            />
           )}
           <div className="my-3 p-2"> {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
           <div className="my-3 p-2">
