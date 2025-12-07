@@ -6,14 +6,14 @@ import Scoreboard from "@/components/Scoreboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, Activity } from "react";
 
-type Score = {
+export type ScoreType = {
   name: string;
   correct: number;
   questions: number;
   incorrectAnswers: number;
 };
 
-export type ScoresType = Score[];
+export type ScoresType = ScoreType[];
 
 export default function GameWrapper() {
   const [scores, setScores] = useState<ScoresType>([]);

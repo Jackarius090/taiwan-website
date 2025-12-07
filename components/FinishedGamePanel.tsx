@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction } from "react";
 import { ScoresType } from "./GameWrapper";
 import { GameState } from "./GameWindow";
 import * as z from "zod";
+import { uploadScore } from "@/app/actions/scoreboard_data";
 
 export default function FinishedGamePanel({
   setShowFinishedGamePanel,
@@ -38,17 +39,16 @@ export default function FinishedGamePanel({
       setFormError(z.prettifyError(result.error));
       console.log(z.prettifyError(result.error));
     } else {
+      const score = {
+        name: name,
+        correct: state.results.filter((r) => r === "✅").length,
+        questions: state.randomRegionsArray.length,
+        incorrectAnswers: state.numberIncorrectAnswers,
+      };
+      uploadScore(score);
       setShowFinishedGamePanel(false);
       setFormError(null);
-      setScores((prev) => [
-        ...prev,
-        {
-          name: name,
-          correct: state.results.filter((r) => r === "✅").length,
-          questions: state.randomRegionsArray.length,
-          incorrectAnswers: state.numberIncorrectAnswers,
-        },
-      ]);
+      setScores((prev) => [...prev, score]);
       setScoreBoardOpen(true);
       e.currentTarget.reset();
     }
