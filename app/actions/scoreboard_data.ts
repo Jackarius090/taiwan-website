@@ -22,7 +22,7 @@ export async function uploadScore(score: ScoreType) {
   }
   try {
     await sql`CREATE TABLE IF NOT EXISTS scores (name TEXT, correct int, questions int, incorrectAnswers int)`;
-    await sql`INSERT INTO scores (name, correct, questions, incorrectAnswers) VALUES (${score.name}, ${score.correct}, ${score.questions}, ${score.incorrectAnswers})`;
+    await sql`INSERT INTO scores (name, correct, questions, incorrectanswers) VALUES (${score.name}, ${score.correct}, ${score.questions}, ${score.incorrectAnswers})`;
     return "score uploaded success";
   } catch (error) {
     console.log(error);
@@ -32,12 +32,12 @@ export async function uploadScore(score: ScoreType) {
 
 export async function downloadScores() {
   try {
-    const rows = await sql`SELECT name, correct, questions, incorrectAnswers FROM scores`;
+    const rows = await sql`SELECT name, correct, questions, incorrectanswers FROM scores`;
     const scores = rows.map((row) => ({
       name: row.name,
       correct: row.correct,
       questions: row.questions,
-      incorrectAnswers: row.incorrect_answers,
+      incorrectAnswers: row.incorrectanswers,
     }));
     console.log(scores);
     return scores;
