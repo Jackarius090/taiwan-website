@@ -6,17 +6,7 @@ import Scoreboard from "@/components/Scoreboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, Activity } from "react";
 
-export type ScoreType = {
-  name: string;
-  correct: number;
-  questions: number;
-  incorrectAnswers: number;
-};
-
-export type ScoresType = ScoreType[];
-
 export default function GameWrapper() {
-  const [scores, setScores] = useState<ScoresType>([]);
   const [scoreBoardOpen, setScoreBoardOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("gameMode");
 
@@ -25,7 +15,7 @@ export default function GameWrapper() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="md:w-11/12" defaultValue="gameMode">
         <header role="banner" className="flex justify-between">
           <div>Taiwan Map Game - test your knowledge of Taiwan&#39;s regions.</div>
-          <Scoreboard scoreBoardOpen={scoreBoardOpen} setScoreBoardOpen={setScoreBoardOpen} scores={scores} />
+          <Scoreboard scoreBoardOpen={scoreBoardOpen} setScoreBoardOpen={setScoreBoardOpen} />
           <TabsList>
             <TabsTrigger value="gameMode">Game mode</TabsTrigger>
             <TabsTrigger value="practiceMode">Practice mode</TabsTrigger>
@@ -33,7 +23,7 @@ export default function GameWrapper() {
         </header>
         <Activity mode={activeTab === "gameMode" ? "visible" : "hidden"}>
           <TabsContent value="gameMode">
-            <GameWindow setScores={setScores} setScoreBoardOpen={setScoreBoardOpen} />
+            <GameWindow setScoreBoardOpen={setScoreBoardOpen} />
           </TabsContent>
         </Activity>
         <Activity mode={activeTab === "practiceMode" ? "visible" : "hidden"}>

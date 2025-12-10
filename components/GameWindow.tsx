@@ -7,8 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import MapButtons from "./MapButtons";
 import FinishedGamePanel from "./FinishedGamePanel";
-import { Region } from "@/lib/types/Region";
-import { ScoresType } from "./GameWrapper";
+import { Region } from "@/lib/types/Types";
 import regions from "../lib/regions.json";
 
 //Fisher-Yates shuffle algorithm from stack overflow
@@ -131,13 +130,7 @@ function gameReducer(state: GameState, action: GameActions) {
   }
 }
 
-export default function GameWindow({
-  setScores,
-  setScoreBoardOpen,
-}: {
-  setScores: Dispatch<SetStateAction<ScoresType>>;
-  setScoreBoardOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: Dispatch<SetStateAction<boolean>> }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   const [showFinishedGamePanel, setShowFinishedGamePanel] = useState(false);
 
@@ -189,7 +182,6 @@ export default function GameWindow({
           {showFinishedGamePanel && (
             <FinishedGamePanel
               state={state}
-              setScores={setScores}
               setScoreBoardOpen={setScoreBoardOpen}
               setShowFinishedGamePanel={setShowFinishedGamePanel}
             />

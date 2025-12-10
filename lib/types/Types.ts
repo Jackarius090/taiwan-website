@@ -11,3 +11,12 @@ export type Region = {
   description: string;
   chineseName: string;
 };
+
+export type ScoreType = {
+  name: string;
+  correct: number;
+  questions: number;
+  incorrectAnswers: number;
+};
+
+export type ScoresType = ScoreType[];

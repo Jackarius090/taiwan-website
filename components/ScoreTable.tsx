@@ -1,10 +1,10 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ScoresType } from "./GameWrapper";
+import { ScoresType } from "@/lib/types/Types";
 import { downloadScores } from "@/app/actions/scoreboard_data";
 import { useState, useEffect } from "react";
 
-export default function ScoreTable({ scores }: { scores: ScoresType }) {
-  const [scoresData, setScoresData] = useState<ScoresType | null>(null);
+export default function ScoreTable() {
+  const [scoresData, setScoresData] = useState<ScoresType | null | undefined>(null);
 
   useEffect(() => {
     async function getData() {
@@ -14,7 +14,6 @@ export default function ScoreTable({ scores }: { scores: ScoresType }) {
     getData();
   }, []);
 
-  console.log(scores);
   return (
     <Table>
       <TableCaption>Rankings</TableCaption>

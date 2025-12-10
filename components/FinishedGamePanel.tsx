@@ -5,19 +5,17 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import InputErrorAlert from "./InputErrorAlert";
 import { Dispatch, SetStateAction } from "react";
-import { ScoresType } from "./GameWrapper";
 import { GameState } from "./GameWindow";
 import * as z from "zod";
 import { uploadScore } from "@/app/actions/scoreboard_data";
 import { usernameType } from "@/lib/types/zodSchemas";
+import { ScoreType } from "@/lib/types/Types";
 
 export default function FinishedGamePanel({
   setShowFinishedGamePanel,
-  setScores,
   setScoreBoardOpen,
   state,
 }: {
-  setScores: Dispatch<SetStateAction<ScoresType>>;
   setScoreBoardOpen: Dispatch<SetStateAction<boolean>>;
   state: GameState;
   setShowFinishedGamePanel: Dispatch<SetStateAction<boolean>>;
@@ -34,7 +32,7 @@ export default function FinishedGamePanel({
       setFormError(z.prettifyError(result.error));
       console.log(z.prettifyError(result.error));
     } else {
-      const score = {
+      const score: ScoreType = {
         name: name,
         correct: state.results.filter((r) => r === "✅").length,
         questions: state.randomRegionsArray.length,
@@ -43,7 +41,6 @@ export default function FinishedGamePanel({
       uploadScore(score);
       setShowFinishedGamePanel(false);
       setFormError(null);
-      setScores((prev) => [...prev, score]);
       setScoreBoardOpen(true);
       e.currentTarget.reset();
     }

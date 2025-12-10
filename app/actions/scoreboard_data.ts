@@ -1,11 +1,12 @@
 "use server";
-import { ScoreType } from "@/components/GameWrapper";
+import { ScoreType } from "@/lib/types/Types";
 import postgres from "postgres";
 import z from "zod";
 import { usernameType } from "@/lib/types/zodSchemas";
 import { ZScore } from "@/lib/types/zodSchemas";
 
 const sql = postgres(process.env.DATABASE_URL!, { ssl: "require" });
+
 export async function uploadScore(score: ScoreType) {
   const userNameResult = usernameType.safeParse(score.name);
   const ZScoreResult = ZScore.safeParse(score);
@@ -30,6 +31,17 @@ export async function uploadScore(score: ScoreType) {
 }
 
 export async function downloadScores() {
-  const scores = await sql<ScoreType[]>`SELECT * FROM scores`;
-  return scores;
+  try {
+    const rows = await sql`SELECT name, correct, questions, incorrectAnswers FROM scores`;
+    const scores = rows.map((row) => ({
+      name: row.name,
+      correct: row.correct,
+      questions: row.questions,
+      incorrectAnswers: row.incorrect_answers,
+    }));
+    console.log(scores);
+    return scores;
+  } catch (error) {
+    console.log(error);
+  }
 }
