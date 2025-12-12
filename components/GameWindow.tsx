@@ -68,10 +68,17 @@ function gameReducer(state: GameState, action: GameActions) {
     case "START_GAME":
       const newRegionArray = makeRandomRegionsArray();
       return {
-        ...initialState,
+        ...state,
         gameRunning: true,
         countryQuestion: newRegionArray[0],
         randomRegionsArray: newRegionArray,
+        result: null,
+        questionIndex: 0,
+        results: [],
+        points: 0,
+        tries: 3,
+        finishedQuiz: false,
+        numberIncorrectAnswers: 0,
       };
     case "CORRECTANSWER":
       const nextIndex = state.questionIndex + 1;
