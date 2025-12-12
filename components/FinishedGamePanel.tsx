@@ -32,11 +32,14 @@ export default function FinishedGamePanel({
       setFormError(z.prettifyError(result.error));
       console.log(z.prettifyError(result.error));
     } else {
+      const numberCorrect = state.results.filter((r) => r === "✅").length;
+      const points = numberCorrect * 5;
       const score: ScoreType = {
         name: name,
-        correct: state.results.filter((r) => r === "✅").length,
-        questions: state.randomRegionsArray.length,
+        points: points,
+        correct: numberCorrect,
         incorrectAnswers: state.numberIncorrectAnswers,
+        questions: state.randomRegionsArray.length,
       };
       uploadScore(score);
       setShowFinishedGamePanel(false);

@@ -14,9 +14,10 @@ export type Region = {
 
 export type ScoreType = {
   name: string;
+  points: number;
   correct: number;
-  questions: number;
   incorrectAnswers: number;
+  questions: number;
 };
 
 export type ScoresType = ScoreType[];

@@ -20,9 +20,10 @@ export default function ScoreTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[70px]">Name</TableHead>
-          <TableHead>Score</TableHead>
-          <TableHead># of Questions</TableHead>
-          <TableHead># of Incorrect</TableHead>
+          <TableHead>Points</TableHead>
+          <TableHead>Correct</TableHead>
+          <TableHead>Incorrect</TableHead>
+          <TableHead>#Questions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -30,9 +31,10 @@ export default function ScoreTable() {
           scoresData.map((score, i) => (
             <TableRow key={i}>
               <TableCell className="font-medium">{score?.name}</TableCell>
+              <TableCell>{score?.points}</TableCell>
               <TableCell>{score?.correct}</TableCell>
-              <TableCell>{score?.questions}</TableCell>
               <TableCell>{score?.incorrectAnswers}</TableCell>
+              <TableCell>{score?.questions}</TableCell>
             </TableRow>
           ))}
       </TableBody>

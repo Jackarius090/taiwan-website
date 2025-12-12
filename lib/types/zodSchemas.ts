@@ -8,7 +8,8 @@ export const usernameType = z
 
 export const ZScore = z.object({
   name: z.string(),
+  points: z.number(),
   correct: z.number(),
-  questions: z.number(),
   incorrectAnswers: z.number(),
+  questions: z.number(),
 });

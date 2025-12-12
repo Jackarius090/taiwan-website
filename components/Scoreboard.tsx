@@ -1,4 +1,4 @@
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import ScoreTable from "./ScoreTable";
 import { Dispatch, SetStateAction } from "react";
@@ -18,7 +18,6 @@ export default function Scoreboard({
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Scoreboard</SheetTitle>
-          <SheetDescription>These are all the scores from the games</SheetDescription>
         </SheetHeader>
         <ScoreTable />
       </SheetContent>
