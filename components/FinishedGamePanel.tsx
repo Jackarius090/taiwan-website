@@ -33,10 +33,9 @@ export default function FinishedGamePanel({
       console.log(z.prettifyError(result.error));
     } else {
       const numberCorrect = state.results.filter((r) => r === "✅").length;
-      const points = numberCorrect * 5;
       const score: ScoreType = {
         name: name,
-        points: points,
+        points: state.points,
         correct: numberCorrect,
         incorrectAnswers: state.numberIncorrectAnswers,
         questions: state.randomRegionsArray.length,

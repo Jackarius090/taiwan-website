@@ -31,6 +31,7 @@ export type GameState = {
   guess: string;
   showIncorrect: boolean;
   results: string[];
+  points: number;
   tries: number;
   finishedQuiz: boolean;
   numberIncorrectAnswers: number;
@@ -55,6 +56,7 @@ const initialState: GameState = {
   guess: "",
   showIncorrect: false,
   results: [],
+  points: 0,
   tries: 3,
   finishedQuiz: false,
   numberIncorrectAnswers: 0,
@@ -66,16 +68,10 @@ function gameReducer(state: GameState, action: GameActions) {
     case "START_GAME":
       const newRegionArray = makeRandomRegionsArray();
       return {
-        ...state,
+        ...initialState,
         gameRunning: true,
         countryQuestion: newRegionArray[0],
         randomRegionsArray: newRegionArray,
-        result: null,
-        questionIndex: 0,
-        results: [],
-        tries: 3,
-        finishedQuiz: false,
-        numberIncorrectAnswers: 0,
       };
     case "CORRECTANSWER":
       const nextIndex = state.questionIndex + 1;
@@ -88,6 +84,7 @@ function gameReducer(state: GameState, action: GameActions) {
         showIncorrect: false,
         results: [...state.results, "✅"],
         tries: 3,
+        points: state.points + state.tries,
       };
     case "INCORRECTANSWER":
       if (state.tries === 1) {
@@ -192,6 +189,7 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
           </div>
           {state.gameRunning && <div className="my-3 p-2">Tries left: {state.tries}</div>}
           {state.gameRunning && <div className="my-3 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
+          {state.gameRunning && <div className="my-3 p-2">Points: {state.points}</div>}
           <div className="grid grid-cols-2 gap-1">
             {state.results.map((answer, i) => {
               return (
