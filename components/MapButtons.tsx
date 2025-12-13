@@ -33,6 +33,7 @@ export default function MapButtons({
                 width={region.bbox.width}
                 height={region.bbox.height}
                 fill="transparent"
+                strokeWidth={1}
                 onClick={() => handleRegionClick(region.name, region.description)}
                 onMouseEnter={() => setHoveredRegion(region.name)}
                 onMouseLeave={() => setHoveredRegion(null)}
