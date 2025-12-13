@@ -1,3 +1,4 @@
+"use client";
 import { Sheet, SheetContent, SheetHeader, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import ScoreTable from "./ScoreTable";
