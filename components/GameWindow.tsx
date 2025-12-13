@@ -176,7 +176,7 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
           </Button>
           {state.gameRunning && state.randomRegionsArray && (
             <div className="my-3 p-2">
-              `Question ${state.questionIndex + 1} of ${state.randomRegionsArray.length}`
+              Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
             </div>
           )}
           <div>
