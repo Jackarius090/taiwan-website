@@ -21,6 +21,7 @@ export default function FinishedGamePanel({
   setShowFinishedGamePanel: Dispatch<SetStateAction<boolean>>;
 }) {
   const [formError, setFormError] = useState<string | null>(null);
+  const numberCorrect = state.results.filter((r) => r === "✅").length;
 
   function handleNameSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -32,7 +33,6 @@ export default function FinishedGamePanel({
       setFormError(z.prettifyError(result.error));
       console.log(z.prettifyError(result.error));
     } else {
-      const numberCorrect = state.results.filter((r) => r === "✅").length;
       const score: ScoreType = {
         name: name,
         points: state.points,
@@ -49,12 +49,26 @@ export default function FinishedGamePanel({
   }
 
   return (
-    <div>
-      Congrats! you finished the quiz! You found {state.results.filter((r) => r === "✅").length} out of{" "}
-      {state.results.length} regions with {state.numberIncorrectAnswers} incorrect answers.
+    <div className="my-4">
+      Congrats! you finished the quiz! Your score:
+      <ul className="border border-black rounded-md p-3">
+        <li>Points: {state.points}</li>
+        <li>
+          Correct: {numberCorrect} out of {state.randomRegionsArray.length}
+        </li>
+        <li> Incorrect: {state.numberIncorrectAnswers}</li>
+      </ul>
       <div className="flex w-full max-w-sm items-center gap-2">
         <form onSubmit={handleNameSubmit}>
-          <Input name="username" type="text" placeholder="Add your name" autoFocus required maxLength={15} />
+          <Input
+            className="my-4 border-black"
+            name="username"
+            type="text"
+            placeholder="Add your name"
+            autoFocus
+            required
+            maxLength={15}
+          />
           {formError && <InputErrorAlert error={formError} />}
           <Button type="submit" variant="outline">
             Submit

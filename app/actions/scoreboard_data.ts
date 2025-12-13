@@ -32,7 +32,8 @@ export async function uploadScore(score: ScoreType) {
 
 export async function downloadScores() {
   try {
-    const rows = await sql`SELECT name, points, correct, incorrectanswers, questions FROM scores ORDER BY correct DESC`;
+    const rows =
+      await sql`SELECT name, points, correct, incorrectanswers, questions FROM scores ORDER BY correct DESC LIMIT 20`;
     const scores = rows.map((row) => ({
       name: row.name,
       points: row.points,

@@ -15,6 +15,7 @@ export default function GameWrapper() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="md:w-11/12" defaultValue="gameMode">
         <header role="banner" className="flex justify-between">
           <div>Taiwan Map Game - test your knowledge of Taiwan&#39;s regions.</div>
+          <div>Information</div>
           <Scoreboard scoreBoardOpen={scoreBoardOpen} setScoreBoardOpen={setScoreBoardOpen} />
           <TabsList>
             <TabsTrigger value="gameMode">Game mode</TabsTrigger>

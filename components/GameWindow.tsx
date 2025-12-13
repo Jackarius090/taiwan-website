@@ -174,14 +174,18 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
           >
             {state.gameRunning ? "Restart Game" : "Start Game"}
           </Button>
-          <div className="my-3 p-2">
-            {state.gameRunning &&
-              state.randomRegionsArray &&
-              `Question ${state.questionIndex + 1} of ${state.randomRegionsArray.length}`}
-          </div>
-          <div className="my-3 p-2 font-bold">
-            {state.gameRunning && !state.chineseMode && <div>Where is {state.countryQuestion?.name}</div>}
-            {state.gameRunning && state.chineseMode && <div>Where is {state.countryQuestion?.chineseName}</div>}
+          {state.gameRunning && state.randomRegionsArray && (
+            <div className="my-3 p-2">
+              `Question ${state.questionIndex + 1} of ${state.randomRegionsArray.length}`
+            </div>
+          )}
+          <div>
+            {state.gameRunning && !state.chineseMode && (
+              <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.name}</div>
+            )}
+            {state.gameRunning && state.chineseMode && (
+              <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.chineseName}</div>
+            )}
           </div>
           {showFinishedGamePanel && (
             <FinishedGamePanel
@@ -190,17 +194,15 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
               setShowFinishedGamePanel={setShowFinishedGamePanel}
             />
           )}
-          <div className="my-3 p-2"> {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}</div>
-          <div className="my-3 p-2">
-            {state.showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>}
-          </div>
-          {state.gameRunning && <div className="my-3 p-2">Tries left: {state.tries}</div>}
-          {state.gameRunning && <div className="my-3 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
-          {state.gameRunning && <div className="my-3 p-2">Points: {state.points}</div>}
-          <div className="grid grid-cols-2 gap-1">
+          {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}
+          {state.showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>}
+          {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
+          {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
+          {state.gameRunning && <div className="my-2 p-2">Points: {state.points}</div>}
+          <div className="grid grid-cols-3 gap-1 mt-6">
             {state.results.map((answer, i) => {
               return (
-                <span key={i}>
+                <span className="text-sm" key={i}>
                   {answer ? i + 1 + "." : ""} {answer}
                 </span>
               );
