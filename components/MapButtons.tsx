@@ -6,7 +6,7 @@ import clsx from "clsx";
 export default function MapButtons({
   handleRegionClick,
 }: {
-  handleRegionClick(name: string, description: string): void;
+  handleRegionClick(name: string, description: string, imageSrc: string | null ): void;
 }) {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
@@ -34,7 +34,7 @@ export default function MapButtons({
                 height={region.bbox.height}
                 fill="transparent"
                 strokeWidth={1}
-                onClick={() => handleRegionClick(region.name, region.description)}
+                onClick={() => handleRegionClick(region.name, region.description, region.imgSrc)}
                 onMouseEnter={() => setHoveredRegion(region.name)}
                 onMouseLeave={() => setHoveredRegion(null)}
               />
@@ -42,7 +42,7 @@ export default function MapButtons({
             <path
               className={clsx("hover:fill-[#4a8f58]", hoveredRegion === region.name && "fill-[#4a8f58]")}
               key={region.id}
-              onClick={() => handleRegionClick(region.name, region.description)}
+              onClick={() => handleRegionClick(region.name, region.description, region.imgSrc)}
               d={region.d}
             ></path>
           </g>
