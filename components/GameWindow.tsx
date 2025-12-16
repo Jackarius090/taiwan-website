@@ -9,6 +9,7 @@ import MapButtons from "./MapButtons";
 import FinishedGamePanel from "./FinishedGamePanel";
 import { Region } from "@/lib/types/Types";
 import regions from "../lib/regions.json";
+import { FireworksBackground } from "./animate-ui/components/backgrounds/fireworks";
 
 //Fisher-Yates shuffle algorithm from stack overflow
 function makeRandomRegionsArray() {
@@ -195,6 +196,8 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
             />
           )}
           {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}
+          {/* <FireworksBackground population={10} fireworkSpeed={100} /> */}
+
           {state.showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>}
           {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
           {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}

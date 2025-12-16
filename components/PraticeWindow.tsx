@@ -16,17 +16,19 @@ export default function PracticeWindow() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-[90vh]">
+    <div className="flex flex-col md:flex-row h-[90vh] overflow-auto">
       <div className="bg-blue-200 md:w-3/4 rounded-md">
         <MapButtons handleRegionClick={handleRegionClick} />
       </div>
-      <div className="md:w-1/4">
+      <div className="md:w-1/4 h-full">
         <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
           <div className="pb-4">Click on a region to show the name</div>
           <div>{showLocation.name}</div>
           <div>{showLocation.description}</div>
           {showLocation.imageSrc && (
-            <Image src={showLocation.imageSrc} width={500} height={500} alt="photo of {showLocation.name}" />
+            <div className="relative w-full h-80 mt-4">
+              <Image className="object-contain" src={showLocation.imageSrc} fill alt="photo of {showLocation.name}" />
+            </div>
           )}
         </article>
       </div>
