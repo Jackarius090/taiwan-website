@@ -163,7 +163,7 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
         <MapButtons handleRegionClick={handleRegionClick} />
       </div>
       <div className="md:w-1/4">
-        <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
+        <article className="relative border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
           <div className="flex items-center space-x-2">
             <Switch onClick={() => dispatch({ type: "CHINESEMODE" })} id="chinese-mode" />
             <Label htmlFor="chinese-mode">Chinese mode</Label>
@@ -175,42 +175,43 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
           >
             {state.gameRunning ? "Restart Game" : "Start Game"}
           </Button>
-          {state.gameRunning && state.randomRegionsArray && (
-            <div className="my-3 p-2">
-              Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
+          <div className="absolute z-10">
+            {state.gameRunning && state.randomRegionsArray && (
+              <div className="my-3 p-2">
+                Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
+              </div>
+            )}
+            <div>
+              {state.gameRunning && !state.chineseMode && (
+                <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.name}</div>
+              )}
+              {state.gameRunning && state.chineseMode && (
+                <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.chineseName}</div>
+              )}
             </div>
-          )}
-          <div>
-            {state.gameRunning && !state.chineseMode && (
-              <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.name}</div>
+            {showFinishedGamePanel && (
+              <FinishedGamePanel
+                state={state}
+                setScoreBoardOpen={setScoreBoardOpen}
+                setShowFinishedGamePanel={setShowFinishedGamePanel}
+              />
             )}
-            {state.gameRunning && state.chineseMode && (
-              <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.chineseName}</div>
-            )}
+            {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}
+            {state.showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>}
+            {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
+            {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
+            {state.gameRunning && <div className="my-2 p-2">Points: {state.points}</div>}
+            <div className="grid grid-cols-3 gap-1 mt-6">
+              {state.results.map((answer, i) => {
+                return (
+                  <span className="text-sm" key={i}>
+                    {answer ? i + 1 + "." : ""} {answer}
+                  </span>
+                );
+              })}
+            </div>
           </div>
-          {showFinishedGamePanel && (
-            <FinishedGamePanel
-              state={state}
-              setScoreBoardOpen={setScoreBoardOpen}
-              setShowFinishedGamePanel={setShowFinishedGamePanel}
-            />
-          )}
-          {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}
-          {/* <FireworksBackground population={10} fireworkSpeed={100} /> */}
-
-          {state.showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>}
-          {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
-          {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
-          {state.gameRunning && <div className="my-2 p-2">Points: {state.points}</div>}
-          <div className="grid grid-cols-3 gap-1 mt-6">
-            {state.results.map((answer, i) => {
-              return (
-                <span className="text-sm" key={i}>
-                  {answer ? i + 1 + "." : ""} {answer}
-                </span>
-              );
-            })}
-          </div>
+          <FireworksBackground className="" population={10} fireworkSpeed={100} />
         </article>
       </div>
     </main>
