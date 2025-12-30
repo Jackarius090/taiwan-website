@@ -175,7 +175,8 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
           >
             {state.gameRunning ? "Restart Game" : "Start Game"}
           </Button>
-          <div className="absolute z-10">
+
+          <div className="absolute z-20">
             {state.gameRunning && state.randomRegionsArray && (
               <div className="my-3 p-2">
                 Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
@@ -211,7 +212,10 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
               })}
             </div>
           </div>
-          <FireworksBackground className="" population={10} fireworkSpeed={100} />
+          <div className="h-64 relative">
+            <div className="h-1/2 w-full bottom-0 absolute z-10 bg-amber-300"></div>
+            <FireworksBackground className="" population={10} fireworkSpeed={100} />
+          </div>
         </article>
       </div>
     </main>
