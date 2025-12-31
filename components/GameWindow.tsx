@@ -176,7 +176,7 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
             {state.gameRunning ? "Restart Game" : "Start Game"}
           </Button>
 
-          <div className="absolute z-20">
+          <div className="absolute inset-x-0 z-20">
             {state.gameRunning && state.randomRegionsArray && (
               <div className="my-3 p-2">
                 Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
@@ -197,7 +197,13 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
                 setShowFinishedGamePanel={setShowFinishedGamePanel}
               />
             )}
-            {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}
+            {state.result && (
+              <div className="h-80 relative">
+                <FireworksBackground className="absolute" population={5} fireworkSpeed={20} />
+                <div className="h-1/2 w-full bottom-0 absolute z-10 bg-amber-300"></div>
+                <div className="bg-green-500 rounded-md p-2 inset-x-4 absolute">Correct!</div>
+              </div>
+            )}
             {state.showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>}
             {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
             {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
@@ -211,10 +217,6 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
                 );
               })}
             </div>
-          </div>
-          <div className="h-64 relative">
-            <div className="h-1/2 w-full bottom-0 absolute z-10 bg-amber-300"></div>
-            <FireworksBackground className="" population={10} fireworkSpeed={100} />
           </div>
         </article>
       </div>
