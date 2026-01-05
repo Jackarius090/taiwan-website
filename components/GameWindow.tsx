@@ -9,7 +9,7 @@ import MapButtons from "./MapButtons";
 import FinishedGamePanel from "./FinishedGamePanel";
 import { Region } from "@/lib/types/Types";
 import regions from "../lib/regions.json";
-import { FireworksBackground } from "./animate-ui/components/backgrounds/fireworks";
+// import { FireworksBackground } from "./animate-ui/components/backgrounds/fireworks";
 
 //Fisher-Yates shuffle algorithm from stack overflow
 function makeRandomRegionsArray() {
@@ -159,11 +159,11 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
 
   return (
     <main role="main" className="flex flex-col md:flex-row h-[90vh]">
-      <div className="bg-blue-200 md:w-3/4 rounded-md">
+      <div className="bg-blue-200 rounded-t-md md:w-3/4 md:rounded-md">
         <MapButtons handleRegionClick={handleRegionClick} />
       </div>
       <div className="md:w-1/4">
-        <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
+        <article className="border-2 border-neutral-800 md:rounded-md h-full p-4 md:ml-4 bg-amber-300">
           <div className="flex items-center space-x-2">
             <Switch onClick={() => dispatch({ type: "CHINESEMODE" })} id="chinese-mode" />
             <Label htmlFor="chinese-mode">Chinese mode</Label>
