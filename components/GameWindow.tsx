@@ -177,50 +177,62 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
           </Button>
 
           <div className="absolute inset-x-0 z-20">
-            {state.gameRunning && state.randomRegionsArray && (
-              <div className="my-3 p-2">
-                Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
+            <div className="relative w-full">
+              <div className="absolute">
+                {state.gameRunning && state.randomRegionsArray && (
+                  <div className="my-3 p-2">
+                    Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
+                  </div>
+                )}
+                <div>
+                  {state.gameRunning && !state.chineseMode && (
+                    <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.name}?</div>
+                  )}
+                  {state.gameRunning && state.chineseMode && (
+                    <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.chineseName}?</div>
+                  )}
+                </div>
               </div>
-            )}
-            <div>
-              {state.gameRunning && !state.chineseMode && (
-                <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.name}</div>
-              )}
-              {state.gameRunning && state.chineseMode && (
-                <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.chineseName}</div>
-              )}
-            </div>
-            {showFinishedGamePanel && (
-              <FinishedGamePanel
-                state={state}
-                setScoreBoardOpen={setScoreBoardOpen}
-                setShowFinishedGamePanel={setShowFinishedGamePanel}
-              />
-            )}
-            {state.result && (
-              <div className="h-80 relative">
-                <div className="bg-green-500 rounded-md p-2 inset-x-4 top-15 absolute">Correct!</div>
-                <FireworksBackground className="absolute" population={5} fireworkSpeed={20} />
-                <div className="h-1/2 w-full bottom-0 absolute z-10 bg-amber-300"></div>
+              <div className="absolute z-0 top-18 inset-x-0">
+                {showFinishedGamePanel && (
+                  <FinishedGamePanel
+                    state={state}
+                    setScoreBoardOpen={setScoreBoardOpen}
+                    setShowFinishedGamePanel={setShowFinishedGamePanel}
+                  />
+                )}
+                <div className="h-80 relative">
+                  {state.result && (
+                    <div>
+                      <div className="bg-green-500 rounded-md p-2 inset-x-4 top-15 absolute">Correct!</div>
+                      <FireworksBackground className="absolute" population={5} fireworkSpeed={20} />
+                      <div className="h-1/2 w-full bottom-0 absolute z-10 bg-amber-300"></div>
+                    </div>
+                  )}
+                  {state.showIncorrect && (
+                    <div className="bg-red-500 rounded-md p-2 inset-x-4 top-15 absolute">
+                      Wrong! That&apos;s {state.guess}!
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-            <div className="relative">
-              {state.showIncorrect && (
-                <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>
-              )}
-              {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
-              {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
-              {state.gameRunning && <div className="my-2 p-2">Points: {state.points}</div>}
-            </div>
+              <div className="absolute top-50 inset-x-4">
+                <div>
+                  {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
+                  {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
+                  {state.gameRunning && <div className="my-2 p-2">Points: {state.points}</div>}
+                </div>
 
-            <div className="grid grid-cols-3 gap-1 mt-6">
-              {state.results.map((answer, i) => {
-                return (
-                  <span className="text-sm" key={i}>
-                    {answer ? i + 1 + "." : ""} {answer}
-                  </span>
-                );
-              })}
+                <div className="grid grid-cols-3 gap-1 mt-6">
+                  {state.results.map((answer, i) => {
+                    return (
+                      <span className="text-sm" key={i}>
+                        {answer ? i + 1 + "." : ""} {answer}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </article>
