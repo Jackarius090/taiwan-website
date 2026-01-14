@@ -163,7 +163,7 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
         <MapButtons handleRegionClick={handleRegionClick} />
       </div>
       <div className="md:w-1/4">
-        <article className="border-2 border-neutral-800 md:rounded-md h-full p-4 md:ml-4 bg-amber-300">
+        <article className="relative border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
           <div className="flex items-center space-x-2">
             <Switch onClick={() => dispatch({ type: "CHINESEMODE" })} id="chinese-mode" />
             <Label htmlFor="chinese-mode">Chinese mode</Label>
@@ -175,41 +175,65 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
           >
             {state.gameRunning ? "Restart Game" : "Start Game"}
           </Button>
-          {state.gameRunning && state.randomRegionsArray && (
-            <div className="my-3 p-2">
-              Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
-            </div>
-          )}
-          <div>
-            {state.gameRunning && !state.chineseMode && (
-              <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.name}</div>
-            )}
-            {state.gameRunning && state.chineseMode && (
-              <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.chineseName}</div>
-            )}
-          </div>
-          {showFinishedGamePanel && (
-            <FinishedGamePanel
-              state={state}
-              setScoreBoardOpen={setScoreBoardOpen}
-              setShowFinishedGamePanel={setShowFinishedGamePanel}
-            />
-          )}
-          {state.result && <div className="bg-green-500 rounded-md p-2">Correct!</div>}
-          {/* <FireworksBackground population={10} fireworkSpeed={100} /> */}
 
-          {state.showIncorrect && <div className="bg-red-500 rounded-md p-2">Wrong! That&apos;s {state.guess}!</div>}
-          {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
-          {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
-          {state.gameRunning && <div className="my-2 p-2">Points: {state.points}</div>}
-          <div className="grid grid-cols-3 gap-1 mt-6">
-            {state.results.map((answer, i) => {
-              return (
-                <span className="text-sm" key={i}>
-                  {answer ? i + 1 + "." : ""} {answer}
-                </span>
-              );
-            })}
+          <div className="absolute inset-x-0 z-20">
+            <div className="relative w-full">
+              <div className="absolute">
+                {state.gameRunning && state.randomRegionsArray && (
+                  <div className="my-3 p-2">
+                    Question {state.questionIndex + 1} of {state.randomRegionsArray.length}:
+                  </div>
+                )}
+                <div>
+                  {state.gameRunning && !state.chineseMode && (
+                    <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.name}?</div>
+                  )}
+                  {state.gameRunning && state.chineseMode && (
+                    <div className="my-3 p-2 font-bold">Where is {state.countryQuestion?.chineseName}?</div>
+                  )}
+                </div>
+              </div>
+              <div className="absolute z-0 top-18 inset-x-0">
+                {showFinishedGamePanel && (
+                  <FinishedGamePanel
+                    state={state}
+                    setScoreBoardOpen={setScoreBoardOpen}
+                    setShowFinishedGamePanel={setShowFinishedGamePanel}
+                  />
+                )}
+                <div className="h-80 relative">
+                  {state.result && (
+                    <div>
+                      <div className="bg-green-500 rounded-md p-2 inset-x-4 top-15 absolute">Correct!</div>
+                      <FireworksBackground className="absolute" population={5} fireworkSpeed={20} />
+                      <div className="h-1/2 w-full bottom-0 absolute z-10 bg-amber-300"></div>
+                    </div>
+                  )}
+                  {state.showIncorrect && (
+                    <div className="bg-red-500 rounded-md p-2 inset-x-4 top-15 absolute">
+                      Wrong! That&apos;s {state.guess}!
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="absolute top-50 inset-x-4">
+                <div>
+                  {state.gameRunning && <div className="my-2 p-2">Tries left: {state.tries}</div>}
+                  {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
+                  {state.gameRunning && <div className="my-2 p-2">Points: {state.points}</div>}
+                </div>
+
+                <div className="grid grid-cols-3 gap-1 mt-6">
+                  {state.results.map((answer, i) => {
+                    return (
+                      <span className="text-sm" key={i}>
+                        {answer ? i + 1 + "." : ""} {answer}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </article>
       </div>
