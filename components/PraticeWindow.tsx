@@ -22,8 +22,7 @@ export default function PracticeWindow() {
       </div>
       <div className="md:w-1/4 h-full">
         <article className="border-2 border-neutral-800 rounded-md h-full p-4 md:ml-4 bg-amber-300">
-          <div className="pb-4">Click on a region to show the name</div>
-          <div>{showLocation.name}</div>
+          <div className="pb-4">Click on a region to show the name and description</div>
           <div>{showLocation.description}</div>
           {showLocation.imageSrc && (
             <div className="relative w-full h-80 mt-4">
