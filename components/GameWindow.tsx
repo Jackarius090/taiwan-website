@@ -9,7 +9,7 @@ import MapButtons from "./MapButtons";
 import FinishedGamePanel from "./FinishedGamePanel";
 import { Region } from "@/lib/types/Types";
 import regions from "../lib/regions.json";
-// import { FireworksBackground } from "./animate-ui/components/backgrounds/fireworks";
+import { FireworksBackground } from "./animate-ui/components/backgrounds/fireworks";
 
 //Fisher-Yates shuffle algorithm from stack overflow
 function makeRandomRegionsArray() {
