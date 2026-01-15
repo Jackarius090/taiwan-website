@@ -12,15 +12,15 @@ import { usernameType } from "@/lib/types/zodSchemas";
 import { ScoreType } from "@/lib/types/Types";
 
 export default function FinishedGamePanel({
-  setShowFinishedGamePanel,
   setScoreBoardOpen,
   state,
 }: {
   setScoreBoardOpen: Dispatch<SetStateAction<boolean>>;
   state: GameState;
-  setShowFinishedGamePanel: Dispatch<SetStateAction<boolean>>;
 }) {
   const [formError, setFormError] = useState<string | null>(null);
+  const [showInputButtons, setShowInputButtons] = useState(true);
+
   const numberCorrect = state.results.filter((r) => r === "✅").length;
 
   function handleNameSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -41,7 +41,7 @@ export default function FinishedGamePanel({
         questions: state.randomRegionsArray.length,
       };
       uploadScore(score);
-      setShowFinishedGamePanel(false);
+      setShowInputButtons(false);
       setFormError(null);
       setScoreBoardOpen(true);
       e.currentTarget.reset();
@@ -51,7 +51,7 @@ export default function FinishedGamePanel({
   return (
     <div className="my-4">
       Congrats! you finished the quiz! Your score:
-      <ul className="border border-black rounded-md p-3">
+      <ul className="border border-black rounded-md p-3 mt-4">
         <li>Points: {state.points}</li>
         <li>
           Correct: {numberCorrect} out of {state.randomRegionsArray.length}
@@ -59,21 +59,23 @@ export default function FinishedGamePanel({
         <li> Incorrect: {state.numberIncorrectAnswers}</li>
       </ul>
       <div className="flex w-full max-w-sm items-center gap-2">
-        <form onSubmit={handleNameSubmit}>
-          <Input
-            className="my-4 border-black"
-            name="username"
-            type="text"
-            placeholder="Add your name"
-            autoFocus
-            required
-            maxLength={15}
-          />
-          {formError && <InputErrorAlert error={formError} />}
-          <Button type="submit" variant="outline">
-            Submit
-          </Button>
-        </form>
+        {showInputButtons && (
+          <form onSubmit={handleNameSubmit}>
+            <Input
+              className="my-4 border-black"
+              name="username"
+              type="text"
+              placeholder="Add your name"
+              autoFocus
+              required
+              maxLength={15}
+            />
+            {formError && <InputErrorAlert error={formError} />}
+            <Button type="submit" variant="outline">
+              Submit
+            </Button>
+          </form>
+        )}
       </div>
     </div>
   );

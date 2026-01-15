@@ -26,7 +26,12 @@ export default function PracticeWindow() {
           <div>{showLocation.description}</div>
           {showLocation.imageSrc && (
             <div className="relative w-full h-80 mt-4">
-              <Image className="object-contain" src={showLocation.imageSrc} fill alt="photo of {showLocation.name}" />
+              <Image
+                className="object-contain"
+                src={showLocation.imageSrc}
+                fill
+                alt={`photo of ${showLocation.name}`}
+              />
             </div>
           )}
         </article>

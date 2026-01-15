@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "./ui/button";
 import { Label } from "@/components/ui/label";
@@ -137,7 +137,6 @@ function gameReducer(state: GameState, action: GameActions) {
 
 export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: Dispatch<SetStateAction<boolean>> }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
-  const [showFinishedGamePanel, setShowFinishedGamePanel] = useState(false);
 
   function handleRegionClick(answer: string) {
     if (!state.gameRunning || state.finishedQuiz) return;
@@ -152,7 +151,6 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
       state.questionIndex >= state.randomRegionsArray?.length - 1 &&
       (answer === state.countryQuestion?.name || state.tries === 1)
     ) {
-      setShowFinishedGamePanel(true);
       dispatch({ type: "FINISHED_QUIZ" });
     }
   }
@@ -175,6 +173,7 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
           >
             {state.gameRunning ? "Restart Game" : "Start Game"}
           </Button>
+          {!state.gameRunning && <FinishedGamePanel state={state} setScoreBoardOpen={setScoreBoardOpen} />}
 
           <div className="absolute inset-x-0 z-20">
             <div className="relative w-full">
@@ -194,27 +193,22 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
                 </div>
               </div>
               <div className="absolute z-0 top-18 inset-x-0">
-                {showFinishedGamePanel && (
-                  <FinishedGamePanel
-                    state={state}
-                    setScoreBoardOpen={setScoreBoardOpen}
-                    setShowFinishedGamePanel={setShowFinishedGamePanel}
-                  />
+                {state.gameRunning && (
+                  <div className="h-80 relative">
+                    {state.result && (
+                      <div>
+                        <div className="bg-green-500 rounded-md p-2 inset-x-4 top-15 absolute">Correct!</div>
+                        <FireworksBackground className="absolute" population={5} fireworkSpeed={20} />
+                        <div className="h-1/2 w-full bottom-0 absolute z-10 bg-amber-300"></div>
+                      </div>
+                    )}
+                    {state.showIncorrect && (
+                      <div className="bg-red-500 rounded-md p-2 inset-x-4 top-15 absolute">
+                        Wrong! That&apos;s {state.guess}!
+                      </div>
+                    )}
+                  </div>
                 )}
-                <div className="h-80 relative">
-                  {state.result && (
-                    <div>
-                      <div className="bg-green-500 rounded-md p-2 inset-x-4 top-15 absolute">Correct!</div>
-                      <FireworksBackground className="absolute" population={5} fireworkSpeed={20} />
-                      <div className="h-1/2 w-full bottom-0 absolute z-10 bg-amber-300"></div>
-                    </div>
-                  )}
-                  {state.showIncorrect && (
-                    <div className="bg-red-500 rounded-md p-2 inset-x-4 top-15 absolute">
-                      Wrong! That&apos;s {state.guess}!
-                    </div>
-                  )}
-                </div>
               </div>
               <div className="absolute top-50 inset-x-4">
                 <div>
@@ -222,16 +216,17 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
                   {state.gameRunning && <div className="my-2 p-2">Incorrect: {state.numberIncorrectAnswers}</div>}
                   {state.gameRunning && <div className="my-2 p-2">Points: {state.points}</div>}
                 </div>
-
-                <div className="grid grid-cols-3 gap-1 mt-6">
-                  {state.results.map((answer, i) => {
-                    return (
-                      <span className="text-sm" key={i}>
-                        {answer ? i + 1 + "." : ""} {answer}
-                      </span>
-                    );
-                  })}
-                </div>
+                {state.gameRunning && (
+                  <div className="grid grid-cols-3 gap-1 mt-6">
+                    {state.results.map((answer, i) => {
+                      return (
+                        <span className="text-sm" key={i}>
+                          {answer ? i + 1 + "." : ""} {answer}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </div>
