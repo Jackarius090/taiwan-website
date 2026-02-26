@@ -171,9 +171,9 @@ export default function GameWindow({ setScoreBoardOpen }: { setScoreBoardOpen: D
             className="my-3"
             onClick={() => dispatch({ type: "START_GAME", payload: makeRandomRegionsArray() })}
           >
-            {state.gameRunning ? "Restart Game" : "Start Game"}
+            {state.gameRunning || state.finishedQuiz ? "Restart Game" : "Start Game"}
           </Button>
-          {!state.gameRunning && <FinishedGamePanel state={state} setScoreBoardOpen={setScoreBoardOpen} />}
+          {state.finishedQuiz && <FinishedGamePanel state={state} setScoreBoardOpen={setScoreBoardOpen} />}
 
           <div className="absolute inset-x-0 z-20">
             <div className="relative w-full">

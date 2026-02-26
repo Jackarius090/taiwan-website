@@ -54,9 +54,9 @@ export default function FinishedGamePanel({
       <ul className="border border-black rounded-md p-3 mt-4">
         <li>Points: {state.points}</li>
         <li>
-          Correct: {numberCorrect} out of {state.randomRegionsArray.length}
+          Correct questions: {numberCorrect} out of {state.randomRegionsArray.length}
         </li>
-        <li> Incorrect: {state.numberIncorrectAnswers}</li>
+        <li> Incorrect tries: {state.numberIncorrectAnswers}</li>
       </ul>
       <div className="flex w-full max-w-sm items-center gap-2">
         {showInputButtons && (
