@@ -7,8 +7,8 @@ export default function InfoPopover() {
       <PopoverTrigger>
         <Info size={26} />
       </PopoverTrigger>
-      <PopoverContent className="w-full p-2">
-        <div className="mb-4 p-2 rounded-md hover:bg-accent">
+      <PopoverContent className="w-full p-2 bg-amber-300 border-amber-500">
+        <div className="mb-4 p-2 rounded-md hover:bg-amber-400">
           <a href="https://github.com/Jackarius090/taiwan-website">https://github.com/Jackarius090/taiwan-website</a>
         </div>
         <div>Made using:</div>
